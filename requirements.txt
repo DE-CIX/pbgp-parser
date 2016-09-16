@@ -1,0 +1,2 @@
+pcapy
+kafka-python
