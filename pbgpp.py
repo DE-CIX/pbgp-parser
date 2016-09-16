@@ -70,4 +70,8 @@ group_6.add_argument("--version", help="displays the current version of this sof
 group_6.add_argument("--progress", help="displays the current progress - only applicable when using pcap file as input source and writing to file or Kafka", action="store_true", dest="progress")
 
 main_handler = PBGPPHandler(parser)
-main_handler.handle()
+
+try:
+    main_handler.handle()
+except Exception as e:
+    print ("ERROR: " + str(e))

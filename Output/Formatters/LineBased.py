@@ -70,7 +70,7 @@ class LineBasedFormatter(BGPFormatter):
         if not fields:
             self.fields = ["message.timestamp", "message.type", "message.ip.source", "message.ip.destination"]
         else:
-            self.fields = None
+            self.fields = fields
 
         self.separator = separator
 

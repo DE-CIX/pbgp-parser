@@ -175,7 +175,8 @@ class PBGPPHandler:
         elif self.args.formatter == "HUMAN_READABLE":
             self.formatter = HumanReadableFormatter()
         elif self.args.formatter == "LINE":
-            self.formatter = LineBasedFormatter()
+            values = self.args.fields.split(",")
+            self.formatter = LineBasedFormatter(fields=values)
         else:
             self.__parser.error("Can't recognize the formatter.")
 
@@ -190,7 +191,7 @@ class PBGPPHandler:
             self.__parser.error("Can't recognize the output pipe.")
 
     def __handle_interface(self):
-        pass
+        raise NotImplemented
 
     def __handle_pcap(self):
         handle = pcapy.open_offline(self.args.pcap)
