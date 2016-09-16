@@ -75,3 +75,5 @@ try:
     main_handler.handle()
 except Exception as e:
     print ("ERROR: " + str(e))
+except KeyboardInterrupt:
+    print ("Exit execution due to keyboard interruption.")
