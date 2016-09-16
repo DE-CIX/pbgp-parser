@@ -197,7 +197,8 @@ class PBGPPHandler:
         handle.loop(0, self.__packet_handler)
 
     def __handle_stdin(self):
-        pass
+        handle = pcapy.open_offline("-")
+        handle.loop(0, self.__packet_handler)
 
     def __packet_handler(self, header, payload):
         eth = PCAPEthernet(payload)
