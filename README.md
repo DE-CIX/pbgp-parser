@@ -11,6 +11,15 @@ The parser is able to format the parsed BGP messages into: a human-readable form
 
 The parser is able to pipe its output to: standard out (stdout), a file and into an Apache Kafka topic.
 
+## Usage
+You may use `--help` argument to view all available options and arguments. The most simple usage example reads a PCAP file from standard in, produces a human readable output and pipes it back to standard out:
+
+    cat /path/to/file.pcap | pbgpp.py -
+    
+You are also able to apply filtering. Assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command:
+
+    cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
+
 ## Contributions
 Feel free to contribute your own extensions, enhancements or fixes for existing bugs. Check out the issues page in GitHub for further information.
 
