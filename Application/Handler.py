@@ -22,6 +22,7 @@ from itertools import chain
 
 import pcapy
 
+from BGP.Exceptions import BGPPacketHasNoMessagesError, BGPError
 from BGP.Packet import BGPPacket
 from Output.Filters.ASNFilter import ASNFilter
 from Output.Filters.CommunityASNFilter import CommunityASNFilter
@@ -222,10 +223,16 @@ class PBGPPHandler:
             if not filter.apply(pcap_information):
                 return
 
-        bgp = BGPPacket(tcp.get_tcp_payload(), pcap_information)
+        try:
+            bgp = BGPPacket(tcp.get_tcp_payload(), pcap_information)
 
-        messages = bgp.message_list
+            messages = bgp.message_list
 
-        for m in messages:
-            handler = OutputHandler(message=m, filter=self.filters, formatter=self.formatter, pipe=self.pipe)
-            handler.handle()
+            for m in messages:
+                handler = OutputHandler(message=m, filter=self.filters, formatter=self.formatter, pipe=self.pipe)
+                handler.handle()
+
+        except BGPPacketHasNoMessagesError:
+            pass
+        except BGPError:
+            pass

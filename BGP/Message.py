@@ -104,7 +104,11 @@ class BGPMessage:
         # Implement factory pattern for easy message class creation
         # First 2 bytes of BGP header is the message length
         # The byte after message length is the message type
-        bgp_header = struct.unpack("!HB", payload[:3])
+        try:
+            bgp_header = struct.unpack("!HB", payload[:3])
+        except Exception as e:
+            # This could happen on a malformed packet
+            raise BGPMessageFactoryError("given payload has no valid message type.")
 
         message_length = bgp_header[0]
         message_type = bgp_header[1]

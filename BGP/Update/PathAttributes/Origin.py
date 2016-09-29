@@ -29,6 +29,8 @@ class PathAttributeOrigin(BGPPathAttribute):
         BGPPathAttribute.__init__(self, payload)
         self.type = BGPStatics.UPDATE_ATTRIBUTE_ORIGIN
 
+        self.origin_value = None
+
         self.__parse()
 
     def __parse(self):

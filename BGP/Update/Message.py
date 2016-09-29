@@ -203,6 +203,5 @@ class BGPUpdateMessage(BGPMessage):
             logging.info(p)
         except Exception as e:
             self.error = True
-            logging.error(e)
 
         self.error = False

@@ -66,7 +66,12 @@ class OutputHandler:
 
     def __format(self):
         # Format the packet or a single message (e.g. apply JSON-formatting)
-        self.output = self.formatter.apply(self.message)
+        try:
+            self.output = self.formatter.apply(self.message)
+        except TypeError:
+            self.output = None
+        except AttributeError:
+            self.output = None
 
     def __pipe(self):
         # Pipe the filtered and formatted output (e.g. into a file or into stdout)
@@ -80,7 +85,7 @@ class OutputHandler:
             if self.message is not None:
                 self.__format()
 
-                if self.message is not None:
+                if self.output is not None:
                     self.__pipe()
                 else:
                     # Don't display message if there occurred an error during formatting
