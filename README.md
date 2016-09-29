@@ -11,6 +11,11 @@ The parser is able to format the parsed BGP messages into: a human-readable form
 
 The parser is able to pipe its output to: standard out (stdout), a file and into an Apache Kafka topic.
 
+## Contributions
+Feel free to contribute your own extensions, enhancements or fixes for existing bugs. Check out the issues page in GitHub for further information.
+
+If you have any other kind of enqueries feel free to contact our research and development team: rnd@de-cix.net
+
 ## Copyright, License & Credits
 PCAP BGP Parser (pbgpp) - Copyright (C) 2016, DE-CIX Management GmbH.
 
