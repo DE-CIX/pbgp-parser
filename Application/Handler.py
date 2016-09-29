@@ -182,7 +182,9 @@ class PBGPPHandler:
 
     def __parse_pipe(self):
         if self.args.pipe == "FILE":
-            self.pipe = FilePipe(self.args.pipe)
+            if self.args.output_target is None:
+                self.__parser.error("You need to specify the output target (-o / --output) when using FILE as pipe.")
+            self.pipe = FilePipe(self.args.output_target)
         elif self.args.pipe == "STDOUT":
             self.pipe = StdOutPipe()
         elif self.args.pipe == "KAFKA":
