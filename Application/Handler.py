@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import logging
 import sys
 from itertools import chain
@@ -32,10 +33,12 @@ from Output.Filters.IPSourceFilter import IPSourceFilter
 from Output.Filters.LastASNFilter import LastASNFilter
 from Output.Filters.MACDestinationFilter import MACDestinationFilter
 from Output.Filters.MACSourceFilter import MACSourceFilter
+from Output.Filters.MessageSizeFilter import MessageSizeFilter
 from Output.Filters.MessageSubTypeFilter import MessageSubTypeFilter
 from Output.Filters.MessageTypeFilter import MessageTypeFilter
 from Output.Filters.NLRIFilter import NLRIFilter
 from Output.Filters.NextHopFilter import NextHopFilter
+from Output.Filters.TimestampFilter import TimestampFilter
 from Output.Filters.WithdrawnFilter import WithdrawnFilter
 from Output.Formatters.HumanReadable import HumanReadableFormatter
 from Output.Formatters.JSON import JSONFormatter
@@ -150,6 +153,11 @@ class PBGPPHandler:
             filters = list(chain(*values))
             self.filters.append(CommunityValueFilter(filters))
 
+        if self.args.filter_message_size:
+            values = self.args.filter_message_size
+            filters = list(chain(*values))
+            self.filters.append(MessageSizeFilter(filters))
+
         if self.args.filter_source_ip:
             values = self.args.filter_source_ip
             filters = list(chain(*values))
@@ -169,6 +177,11 @@ class PBGPPHandler:
             values = self.args.filter_destination_mac
             filters = list(chain(*values))
             self.prefilters.append(MACDestinationFilter(filters))
+
+        if self.args.filter_timestamp:
+            values = self.args.filter_timestamp
+            filters = list(chain(*values))
+            self.prefilters.append(TimestampFilter(filters))
 
     def __parse_formatter(self):
         if self.args.formatter == "JSON":
