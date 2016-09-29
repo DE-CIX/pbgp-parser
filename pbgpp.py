@@ -37,7 +37,7 @@ parser.add_argument("-o", "--output", help="specify target output file if your o
 group_1 = parser.add_mutually_exclusive_group()
 group_1.add_argument("--interface", help="use a network interface as input source (specify interface)", dest="interface")
 group_1.add_argument("--pcap", help="use a pcap file as input source (specify file)", dest="pcap")
-group_1.add_argument("--stdin", help="use stdin as input source", dest="stdin", action="store_true")
+group_1.add_argument("--stdin", "-", help="use stdin as input source", dest="stdin", action="store_true")
 
 group_2 = parser.add_mutually_exclusive_group()
 group_2.add_argument("-q", "--quiet", help="just show parsing output", action="store_true", dest="quiet")
@@ -48,6 +48,10 @@ group_3.add_argument("--kafka-server", help="IP address and port of the target k
 group_3.add_argument("--kafka-topic", help="topic of kafka server if your output type is set to KAFKA", dest="kafka_topic")
 
 group_4 = parser.add_argument_group("filters")
+group_4.add_argument("--filter-timestamp", help="just print messages with given timestamp (e.g. 123456789)", nargs="+", action="append", dest="filter_timestamp")
+group_4.add_argument("--filter-timestamp-range", help="just print messages within given timestamp range; split by using minus character (e.g. 123456789-234567890)", nargs="+", action="append", dest="filter_timestamp_range")
+group_4.add_argument("--filter-message-size", help="just print messages with given message size in bytes (e.g. 128)", nargs="+", action="append", dest="filter_message_size")
+group_4.add_argument("--filter-message-size-range", help="just print messages with given message size range; split by using minus character (e.g. 128-256)", nargs="+", action="append", dest="filter_message_size_range")
 group_4.add_argument("--filter-message-type", help="just print packages with given message type (KEEPALIVE, NOTIFICATION, OPEN, ROUTE-REFRESH, UPDATE, WITHDRAWAL)", nargs="+", action="append", dest="filter_message_type")
 group_4.add_argument("--filter-message-subtype", help="just print UPDATE messages with given message sub type (WITHDRAWAL, ANNOUNCE, BOTH, NONE)", nargs="+", action="append", dest="filter_message_subtype")
 group_4.add_argument("--filter-nlri", help="just print packages with given nlri prefix into it (e.g. '80.81.82.0/24'", nargs="+", action="append", dest="filter_nlri")
