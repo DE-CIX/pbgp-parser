@@ -65,7 +65,7 @@ group_4.add_argument("--filter-destination-ip", help="just print packages with g
 group_4.add_argument("--filter-destination-mac", help="just print packages with given destination MAC address (e.g. 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_destination_mac")
 
 group_5 = parser.add_argument_group("line output commands")
-group_5.add_argument("--fields", help="specify the output-fields you wish to display in the order you want; separated by comma", dest="fields", default="update.nlri,update.as_path,update.next_hop,ip.source,ip.destination,update.communities")
+group_5.add_argument("--fields", help="specify the output-fields you wish to display in the order you want; separated by comma", dest="fields", default="message.timestamp,message.type,message.ip.source,message.ip.destination")
 
 group_6 = parser.add_argument_group("other commands")
 group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
