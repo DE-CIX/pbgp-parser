@@ -19,6 +19,10 @@ You may use `--help` argument to view all available options and arguments. The m
 Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command.
 
     cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
+    
+To pipe your output directly into a file you can use the following command. Of course you are able to combine it with filters or different input methods, like reading from a PCAP file.
+
+    cat /path/to/file.pcap | pbgpp.py -p FILE -o output.txt -
 
 ## Contributions
 Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
