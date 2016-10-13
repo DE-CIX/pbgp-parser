@@ -2,7 +2,7 @@
 DE-CIX developed a PCAP parser for analyzing BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or directly from network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
 
 ## Why not Wireshark?
-Wireshark is an awesome tool! Unfortunalty, it only offers an graphical interface that does not satisfy our requirements, e.g., existing BGP fitlers are limited to some fields. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way.
+Wireshark is an awesome tool! Unfortunatly, it only offers an graphical interface that does not satisfy our requirements, e.g., existing BGP filters are limited to some fields. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way.
 
 ## Available inputs, formatters, and pipes
 The parser is able to read PCAP from: File and standard input (stdin) - soon it will be able to read live packages directly from network interface.
@@ -23,7 +23,7 @@ Moreover, filtering is pretty straight forward: assuming you just want to displa
 ## Contributions
 Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
 
-If you have any other kind of enqueries feel free to contact our research and development team: rnd<--at-->de-cix<--dot-->net
+If you have any other kind of inquiries feel free to contact our research and development team: rnd<--at-->de-cix<--dot-->net
 
 ## Copyright, License & Credits
 PCAP BGP Parser (pbgpp) - Copyright (C) 2016, DE-CIX Management GmbH.
