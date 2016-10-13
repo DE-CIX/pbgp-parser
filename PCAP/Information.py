@@ -18,6 +18,9 @@
 #
 
 from binascii import hexlify
+
+import datetime
+
 from PCAP.Exceptions import PCAPInformationError
 
 
@@ -40,6 +43,9 @@ class PCAPInformation:
 
     def get_timestamp(self):
         return self.ts
+
+    def get_timestmap_utc(self):
+        return datetime.datetime.utcfromtimestamp(self.ts[0]).strftime('%Y-%m-%d %H:%M:%S') + "." + str(self.ts[1])
 
     def get_mac(self):
         return self.mac

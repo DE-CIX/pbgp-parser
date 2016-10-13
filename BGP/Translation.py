@@ -64,7 +64,7 @@ class BGPTranslation:
             elif value == BGPStatics.UPDATE_TYPE_ANNOUNCE:
                 return "ANNOUNCE"
             elif value == BGPStatics.UPDATE_TYPE_BOTH:
-                return "BOTH"
+                return "ANNOUNCE / WITHDRAWAL"
             else:
                 return "Unknown"
         except Exception as e:

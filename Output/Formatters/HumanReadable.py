@@ -52,7 +52,7 @@ class HumanReadableFormatter(BGPFormatter):
         string = "[BGPMessage " + BGPTranslation.message_type(message.type) + "] - " + str(message.length) + " Bytes\n"
         string += self.prefix(0) + "MAC: " + message.pcap_information.get_mac().get_source_string() + " -> " + message.pcap_information.get_mac().get_destination_string() + "\n"
         string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
-        string += self.prefix(0) + "Timestamp: " + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1]) + "\n"
+        string += self.prefix(0) + "Timestamp: " + message.pcap_information.get_timestmap_utc() + " (" + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1]) + ")\n"
 
         # Display additional information
         if BGPStatics.MESSAGE_TYPE_KEEPALIVE == message.type:
@@ -94,19 +94,20 @@ class HumanReadableFormatter(BGPFormatter):
             # --- Update Message Sub-Type
             string += self.prefix(0) + "Update Message Sub-Type: " + BGPTranslation.update_subtype(message.subtype) + "\n"
 
-            # --- Withdrawn Routes
+            # --- Lengths
             string += self.prefix(0) + "Withdrawn Routes Length: " + str(message.withdrawn_routes_length) + " Bytes\n"
+            string += self.prefix(0) + "Total Path Attribute Length: " + str(message.path_attributes_length) + " Bytes\n"
 
-            if message.withdrawn_routes_length > 0:
-                string += self.prefix(0) + "Withdrawn Routes:" + "\n"
 
-                # Process withdrawn routes
-                for route in message.withdrawn_routes:
+            # --- NLRI
+            if len(message.nlri) > 0:
+                string += self.prefix(0) + "Prefix (NLRI):" + "\n"
+
+                # Process NLRI
+                for route in message.nlri:
                     string += self.prefix(1) + str(route) + "\n"
 
             # --- Path Attributes
-            string += self.prefix(0) + "Total Path Attribute Length: " + str(message.path_attributes_length) + " Bytes\n"
-
             if message.path_attributes_length > 0:
 
                 # Process path attributes
@@ -123,12 +124,12 @@ class HumanReadableFormatter(BGPFormatter):
                         # We got a "normal" path attribute
                         string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ": " + str(attribute) + "\n"
 
-            # --- NLRI
-            if len(message.nlri) > 0:
-                string += self.prefix(0) + "NLRI:" + "\n"
+            # --- Withdrawn Routes
+            if message.withdrawn_routes_length > 0:
+                string += self.prefix(0) + "Withdrawn Routes:" + "\n"
 
-                # Process NLRI
-                for route in message.nlri:
+                # Process withdrawn routes
+                for route in message.withdrawn_routes:
                     string += self.prefix(1) + str(route) + "\n"
 
         if BGPStatics.MESSAGE_TYPE_NOTIFICATION == message.type:
