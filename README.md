@@ -1,27 +1,27 @@
 # PCAP BGP Parser (pbgpp)
-DE-CIX developed a PCAP parser for analyzing BGP messages. The parser is able to read PCAP input from file system or stdin. Soon it will be able to read and parse BGP messages directly from network interface. Furthermore the parser is able to use several output formatters and pipes to modify the output for your individual needs. Those formatters and pipes can be easily extended - feel free to contribute them to our public repository.
+DE-CIX developed a PCAP parser for analyzing BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or directly from network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
 
 ## Why not Wireshark?
-Wireshark is an awesome tool. But it just offers a graphical environment that does not fulify our use cases. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way. Therefore we decided to develop an own parsing tool that implements our special use cases.
+Wireshark is an awesome tool! Unfortunalty, it only offers an graphical interface that does not satisfy our requirements, e.g., existing BGP fitlers are limited to some fields. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way.
 
-## Available inputs, formatters and pipes
+## Available inputs, formatters, and pipes
 The parser is able to read PCAP from: File and standard input (stdin) - soon it will be able to read live packages directly from network interface.
 
-The parser is able to format the parsed BGP messages into: a human-readable format that offers easy-to-read general information but not the whole insight, JSON with full information scope and a line based output. By using the line based output the user is able to specify which fields he wants to get displayed in a single line. Each field is separated using the TAB character (\t). Therefore that kind of output is pretty easy to parse - you can easily integrate it into a toolchain.
+The parser is able to format the parsed BGP messages into: a human-readable format that offers easy-to-read general information build for adhoc analysis of your network, JSON with full information scope, and a line based output. By using the line based output you may specify which fields you need to get displayed in a single line. Each field is separated using the TAB character (\t). Therefore, that kind of output is pretty easy to parse with other tools/scripts - you can easily integrate it into a toolchain.
 
-The parser is able to pipe its output to: standard out (stdout), a file and into an Apache Kafka topic.
+Potential output targets are: stdout, file, and streams to Apache Kafka.
 
 ## Usage
 You may use `--help` argument to view all available options and arguments. The most simple usage example reads a PCAP file from standard in, produces a human readable output and pipes it back to standard out:
 
     cat /path/to/file.pcap | pbgpp.py -
     
-You are also able to apply filtering. Assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command:
+Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command.
 
     cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
 
 ## Contributions
-Feel free to contribute your own extensions, enhancements or fixes for existing bugs. Check out the issues page in GitHub for further information.
+Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
 
 If you have any other kind of enqueries feel free to contact our research and development team: rnd@de-cix.net
 
