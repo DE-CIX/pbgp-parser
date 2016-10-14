@@ -72,7 +72,11 @@ class PBGPPHandler:
         self.filters = []
         self.prefilters = []
 
+        self.__packet_counter = 0
+
     def handle(self):
+        logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
+
         if self.args.version:
             print("pbgpp PCAP BGP Parser v0.2.0")
             print("Copyright 2016 DE-CIX Management GmbH")
@@ -82,106 +86,134 @@ class PBGPPHandler:
             self.quiet = True
 
         if self.args.verbose:
-            self.verbose = True
+            logging.getLogger().setLevel(logging.DEBUG)
 
         if self.progress:
             self.progress = True
 
+        logger.debug("Parsing filters ...")
         self.__parse_filters()
+
+        logger.debug("Parsing formatters ...")
         self.__parse_formatter()
+
+        logger.debug("Parsing pipes ...")
         self.__parse_pipe()
 
         # Check for input method
         if self.args.interface:
+            logger.info("Initial startup finished. Calling interface handler ...")
             self.__handle_interface()
+            logger.info("Parsing finished - Exiting now with status code 0")
             sys.exit(0)
 
         if self.args.pcap:
+            logger.info("Initial startup finished. Calling pcap handler ...")
             self.__handle_pcap()
+            logger.info("Parsing finished - Exiting now with status code 0")
             sys.exit(0)
 
         if self.args.stdin:
+            logger.info("Initial startup finished. Calling stdin handler ...")
             self.__handle_stdin()
+            logger.info("Parsing finished - Exiting now with status code 0")
             sys.exit(0)
 
         self.__parser.print_help()
         sys.exit(0)
 
     def __parse_filters(self):
+        logger = logging.getLogger("pbgpp.PBGPPHandler.__parse_filters")
+
         if self.args.filter_message_type:
             values = self.args.filter_message_type
             filters = list(chain(*values))
             self.filters.append(MessageTypeFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of MessageTypeFilter")
 
         if self.args.filter_message_subtype:
             values = self.args.filter_message_subtype
             filters = list(chain(*values))
             self.filters.append(MessageSubTypeFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of MessageSubTypeFilter")
 
         if self.args.filter_nlri:
             values = self.args.filter_nlri
             filters = list(chain(*values))
             self.filters.append(NLRIFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of NLRIFilter")
 
         if self.args.filter_withdrawn:
             values = self.args.filter_withdrawn
             filters = list(chain(*values))
             self.filters.append(WithdrawnFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of WithdrawnFilter")
 
         if self.args.filter_next_hop:
             values = self.args.filter_next_hop
             filters = list(chain(*values))
             self.filters.append(NextHopFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of NextHopFilter")
 
         if self.args.filter_asn:
             values = self.args.filter_asn
             filters = list(chain(*values))
             self.filters.append(ASNFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of ASNFilter")
 
         if self.args.filter_last_asn:
             values = self.args.filter_last_asn
             filters = list(chain(*values))
             self.filters.append(LastASNFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of LastASNFilter")
 
         if self.args.filter_community_as:
             values = self.args.filter_community_as
             filters = list(chain(*values))
             self.filters.append(CommunityASNFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of CommunityASNFilter")
 
         if self.args.filter_community_value:
             values = self.args.filter_community_value
             filters = list(chain(*values))
             self.filters.append(CommunityValueFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of CommunityValueFilter")
 
         if self.args.filter_message_size:
             values = self.args.filter_message_size
             filters = list(chain(*values))
             self.filters.append(MessageSizeFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of MessageSizeFilter")
 
         if self.args.filter_source_ip:
             values = self.args.filter_source_ip
             filters = list(chain(*values))
             self.prefilters.append(IPSourceFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of IPSourceFilter")
 
         if self.args.filter_destination_ip:
             values = self.args.filter_destination_ip
             filters = list(chain(*values))
             self.prefilters.append(IPDestinationFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of IPDestinationFilter")
 
         if self.args.filter_source_mac:
             values = self.args.filter_source_mac
             filters = list(chain(*values))
             self.prefilters.append(MACSourceFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACSourceFilter")
 
         if self.args.filter_destination_mac:
             values = self.args.filter_destination_mac
             filters = list(chain(*values))
             self.prefilters.append(MACDestinationFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACDestinationFilter")
 
         if self.args.filter_timestamp:
             values = self.args.filter_timestamp
             filters = list(chain(*values))
             self.prefilters.append(TimestampFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of TimestampFilter")
 
     def __parse_formatter(self):
         if self.args.formatter == "JSON":
@@ -218,14 +250,19 @@ class PBGPPHandler:
         handle.loop(0, self.__packet_handler)
 
     def __packet_handler(self, header, payload):
+        logger = logging.getLogger("pbgpp.PBGPPHandler.__packet_handler")
+        logger.debug("Parsing PCAP packet " + str(self.__packet_counter))
+
         eth = PCAPEthernet(payload)
 
         if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4:
+            logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 ethernet type.")
             return False
 
         ip = PCAPIP(eth.get_eth_payload())
 
         if not ip.get_protocol() == PCAPIP.PROTO_TCP:
+            logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-TCP IP type.")
             return False
 
         tcp = PCAPTCP(ip.get_ip_payload())
@@ -234,6 +271,7 @@ class PBGPPHandler:
 
         for filter in self.prefilters:
             if not filter.apply(pcap_information):
+                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " because no applied pre-filter could be matched.")
                 return
 
         try:
@@ -246,6 +284,9 @@ class PBGPPHandler:
                 handler.handle()
 
         except BGPPacketHasNoMessagesError:
-            pass
+            # This is no problem because a PCAP file could also contain TCP control packets. Those packets obviously do not contain any BGP information.
+            logger.debug("BGPPacket which was assembled from PCAP packet " + str(self.__packet_counter) + " did not contain any BGP messages.")
         except BGPError:
-            pass
+            logger.error("Unspecified BGPError was raised while handling BGPPacket which was assembled from PCAP packet " + str(self.__packet_counter) + ".")
+        finally:
+            self.__packet_counter += 1

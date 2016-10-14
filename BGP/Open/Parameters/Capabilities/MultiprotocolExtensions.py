@@ -18,6 +18,7 @@
 #
 
 import struct
+import logging
 
 from BGP.Open.Parameters.Capability import BGPCapability
 from BGP.Statics import BGPStatics
@@ -36,6 +37,8 @@ class CapabilityMultiprotocolExtensions(BGPCapability):
         self.__parse()
 
     def __parse(self):
+        logger = logging.getLogger("pbgpp.CapabilityMultiprotocolExcentions.__parse")
+
         self.parsed = True
 
         try:
@@ -46,4 +49,5 @@ class CapabilityMultiprotocolExtensions(BGPCapability):
             self.safi = fields[2]
 
         except Exception as e:
+            logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
             self.error = True

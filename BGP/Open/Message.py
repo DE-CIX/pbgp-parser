@@ -35,6 +35,7 @@ class BGPOpenMessage(BGPMessage):
 
     def __parse(self):
         self.parsed = True
+        logger = logging.getLogger('pbgpp.BGPOpenMessage.__parse')
 
         try:
             fields = struct.unpack("!BHHLB", self.payload[:10])
@@ -77,6 +78,7 @@ class BGPOpenMessage(BGPMessage):
 
                 else:
                     # Optional parameter length does NOT equal the length of the remaining payload - malformed message
+                    logger.warning("Optional parameter length does not equal the length of remaining payload.")
                     self.error = True
             else:
                 # Parsing was successful
@@ -84,10 +86,10 @@ class BGPOpenMessage(BGPMessage):
 
         except BGPOptionalParameterFactoryError as f:
             # Factory was not able to recognize parameter type - malformed message
-            logging.info(f)
+            logger.warning("BGPOptionalParameterFactory was not able to recognize parameter type. Exception could be raised due to a malformed message.")
             self.error = True
 
         except Exception as e:
             # Other strange things could happen
-            logging.error(e)
-            self.error = True
+            logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
+

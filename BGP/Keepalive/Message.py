@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+import logging
+
 from BGP.Message import BGPMessage
 from BGP.Statics import BGPStatics
 
@@ -28,8 +30,11 @@ class BGPKeepaliveMessage(BGPMessage):
         self.__parse()
 
     def __parse(self):
+        logger = logging.getLogger("pbgpp.BGPKeepaliveMessage.__parse")
+
         # Check for message length as this is the only possible check we can run on KEEPALIVE messages
         if self.length is not BGPStatics.KEEPALIVE_FIXED_LENGTH:
+            logger.warning("KEEPALIVE message is " + str(self.length) + " bytes long, but mandatory length of KEEPALIVE messages is " + str(BGPStatics.KEEPALIVE_FIXED_LENGTH) + "bytes.")
             self.error = True
         else:
             self.error = False

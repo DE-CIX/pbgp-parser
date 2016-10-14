@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+import logging
+
 from BGP.Statics import BGPStatics
 
 
@@ -32,6 +34,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.boolean")
+            logger.warning("Was not able to recognize input value for boolean translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -52,6 +57,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.message_type")
+            logger.warning("Was not able to recognize input value for message type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -68,6 +76,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.update_subtype")
+            logger.warning("Was not able to recognize input value for update message subtype translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -82,6 +93,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.open_parameter")
+            logger.warning("Was not able to recognize input value for open message parameter translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -120,6 +134,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.capability")
+            logger.warning("Was not able to recognize input value for capability translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -134,6 +151,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.origin")
+            logger.warning("Was not able to recognize input value for origin translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -206,48 +226,57 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.path_attribute")
+            logger.warning("Was not able to recognize input value for path attribute translation.")
+
             return "Unknown"
         
     @staticmethod
     def extended_community(type, subtype):
-        type_string = BGPTranslation.extended_community_type(type)
+        try:
+            type_string = BGPTranslation.extended_community_type(type)
 
-        if type == BGPStatics.EXT_COMMUNITY_T_TWO_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_two_octet_as_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_IPV4_ADDRESS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_ipv4_address_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_FOUR_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_four_octet_as_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_OPAQUE:
-            sub_type_string = BGPTranslation.extended_community_t_opaque(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_QOS_MARKING:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_COS_CAPABILITY:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_EVPN:
-            sub_type_string = BGPTranslation.extended_community_evpn_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_FLOW_SPEC_REDIRECT_MIRROR_TO_IP_NEXT_HOP:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART2:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part2(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART3:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part3(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_TWO_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_two_octet_as_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_IPV4_ADDRESS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_ipv4_address_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_FOUR_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_four_octet_as_subtype(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_OPAQUE:
-            sub_type_string = BGPTranslation.extended_community_nt_opaque(subtype)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_QOS_MARKING:
-            sub_type_string = ""
-        else:
-            sub_type_string = "Unknown Sub-Type"
+            if type == BGPStatics.EXT_COMMUNITY_T_TWO_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_two_octet_as_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_IPV4_ADDRESS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_ipv4_address_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_FOUR_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_four_octet_as_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_OPAQUE:
+                sub_type_string = BGPTranslation.extended_community_t_opaque(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_QOS_MARKING:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_COS_CAPABILITY:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_EVPN:
+                sub_type_string = BGPTranslation.extended_community_evpn_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_FLOW_SPEC_REDIRECT_MIRROR_TO_IP_NEXT_HOP:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART2:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part2(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART3:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part3(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_TWO_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_two_octet_as_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_IPV4_ADDRESS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_ipv4_address_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_FOUR_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_four_octet_as_subtype(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_OPAQUE:
+                sub_type_string = BGPTranslation.extended_community_nt_opaque(subtype)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_QOS_MARKING:
+                sub_type_string = ""
+            else:
+                sub_type_string = "Unknown Sub-Type"
 
-        return type_string + " " + sub_type_string
+            return type_string + " " + sub_type_string
+        except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community")
+            logger.warning("Was not able to recognize input value for extended community translation.")
+
+            return "Unknown Sub-Type"
     
     @staticmethod
     def extended_community_type(value):
@@ -287,46 +316,55 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_type")
+            logger.warning("Was not able to recognize input value for extended community type translation.")
+
             return "Unknown"
 
     @staticmethod
     def extended_community_subtype(type, value):
-        if type == BGPStatics.EXT_COMMUNITY_T_TWO_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_two_octet_as_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_IPV4_ADDRESS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_ipv4_address_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_FOUR_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_t_four_octet_as_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_OPAQUE:
-            sub_type_string = BGPTranslation.extended_community_t_opaque(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_QOS_MARKING:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_COS_CAPABILITY:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_EVPN:
-            sub_type_string = BGPTranslation.extended_community_evpn_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_FLOW_SPEC_REDIRECT_MIRROR_TO_IP_NEXT_HOP:
-            sub_type_string = ""
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART2:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part2(value)
-        elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART3:
-            sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part3(value)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_TWO_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_two_octet_as_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_IPV4_ADDRESS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_ipv4_address_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_FOUR_OCTET_AS_SPECIFIC:
-            sub_type_string = BGPTranslation.extended_community_nt_four_octet_as_subtype(value)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_OPAQUE:
-            sub_type_string = BGPTranslation.extended_community_nt_opaque(value)
-        elif type == BGPStatics.EXT_COMMUNITY_NT_QOS_MARKING:
-            sub_type_string = ""
-        else:
-            sub_type_string = "Unknown Sub-Type"
+        try:
+            if type == BGPStatics.EXT_COMMUNITY_T_TWO_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_two_octet_as_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_IPV4_ADDRESS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_ipv4_address_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_FOUR_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_t_four_octet_as_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_OPAQUE:
+                sub_type_string = BGPTranslation.extended_community_t_opaque(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_QOS_MARKING:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_COS_CAPABILITY:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_EVPN:
+                sub_type_string = BGPTranslation.extended_community_evpn_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_FLOW_SPEC_REDIRECT_MIRROR_TO_IP_NEXT_HOP:
+                sub_type_string = ""
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART2:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part2(value)
+            elif type == BGPStatics.EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_USE_PART3:
+                sub_type_string = BGPTranslation.extended_community_t_generic_experimental_part3(value)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_TWO_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_two_octet_as_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_IPV4_ADDRESS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_ipv4_address_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_FOUR_OCTET_AS_SPECIFIC:
+                sub_type_string = BGPTranslation.extended_community_nt_four_octet_as_subtype(value)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_OPAQUE:
+                sub_type_string = BGPTranslation.extended_community_nt_opaque(value)
+            elif type == BGPStatics.EXT_COMMUNITY_NT_QOS_MARKING:
+                sub_type_string = ""
+            else:
+                sub_type_string = "Unknown Sub-Type"
 
-        return sub_type_string
+            return sub_type_string
+        except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_subtype")
+            logger.warning("Was not able to recognize input value for extended community subtype translation.")
+
+            return "Unknown Sub-Type"
 
     @staticmethod
     def extended_community_evpn_subtype(value):
@@ -350,6 +388,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_evpn_subtype")
+            logger.warning("Was not able to recognize input value for extended community EVPN subtype translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -374,6 +415,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_two_octet_as_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -386,6 +430,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_nt_two_octet_as_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -410,6 +457,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_four_octet_as_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -420,6 +470,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_nt_four_octet_as_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -448,6 +501,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_ipv4_address_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -455,6 +511,9 @@ class BGPTranslation:
         try:
             return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_nt_ipv4_address_subtype")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -485,6 +544,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_opaque")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -497,6 +559,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_nt_opaque")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -523,6 +588,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_generic_experimental")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -533,6 +601,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_generic_experimental_part2")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -543,6 +614,9 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.extended_community_t_generic_experimental_part3")
+            logger.warning("Was not able to recognize input value for type translation.")
+
             return "Unknown"
 
     @staticmethod
@@ -555,4 +629,7 @@ class BGPTranslation:
             else:
                 return "Unknown"
         except Exception as e:
+            logger = logging.getLogger("pbgpp.BGPTranslation.path_segment_type")
+            logger.warning("Was not able to recognize input value for path segment type translation.")
+
             return "Unknown"

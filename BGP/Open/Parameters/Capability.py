@@ -34,6 +34,8 @@ class BGPOptionalParameterCapability(BGPOptionalParameter):
         self.__parse()
 
     def __parse(self):
+        logger = logging.getLogger("pbgpp.BGPOptionalParameterCapability.__parse")
+
         self.parsed = True
 
         try:
@@ -57,10 +59,10 @@ class BGPOptionalParameterCapability(BGPOptionalParameter):
 
         except BGPCapabilityFactoryError as f:
             # We got a malformed packet - could not recognize capability type
-            logging.info(f)
+            logger.warning("BGPCapabilityFactory was not able to recognize parameter type. Exception could be raised due to a malformed message.")
             self.error = True
         except Exception as e:
-            logging.error(e)
+            logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
             self.error = True
 
 

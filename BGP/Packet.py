@@ -76,6 +76,8 @@ class BGPPacket:
             return "<BGPPacket messages=UNKNOWN length=UNKNOWN>"
 
     def __parse(self):
+        logger = logging.getLogger("pbgpp.BGPPacket.__parse")
+
         # Split the byte string by BGP's magic marker and filter the empty matches from result list
         messages = re.split(b'(?:\xff){16}', self.payload)
         messages = list(filter(None, messages))  # Fastest solution for filtering
@@ -92,14 +94,14 @@ class BGPPacket:
             except BGPMessageFactoryError as f:
                 # This exception can be raised when no valid message type could be found
                 # It's a common exception when there is a malformed packet - therefore: log it as INFO
-                logging.info(f.message)
+                logger.info("BGPMessageFactoryError was raised due to unknown message type during initial packet parsing.")
             except BGPPacketError as p:
                 # This exception can be raised when system tries to add non-BGPMessage object to message list
                 # Uncommon to happen - Better raise an error
-                logging.error(p.message)
+                logger.error("Tried to add a non-BGPMessage object to message list.")
             except BGPError as e:
                 # A lot of other things could go wrong - fall back to a warning message
-                logging.warning(e.message)
+                logger.warning("Unspecified BGPError raised during initial packet parsing.")
 
         self.__parsed = True
 

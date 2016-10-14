@@ -23,10 +23,8 @@ import logging
 
 from Application.Handler import PBGPPHandler
 
-logger = logging.getLogger('root')
-FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
-logging.basicConfig(format=FORMAT)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger('pbgpp')
+logging.basicConfig(filename="pbgpp.log", level=logging.INFO, filemode="w", format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 parser = argparse.ArgumentParser(description="detailed bgp packet message parsing from PCAP files or direct network traffic")
 
@@ -71,11 +69,14 @@ group_6 = parser.add_argument_group("other commands")
 group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
 group_6.add_argument("--progress", help="displays the current progress - only applicable when using pcap file as input source and writing to file or Kafka", action="store_true", dest="progress")
 
+logger.info("Initializing runtime handler ...")
 main_handler = PBGPPHandler(parser)
 
 try:
+    logger.info("Calling main handler ...")
     main_handler.handle()
 except Exception as e:
-    print("ERROR: " + str(e))
+    logger.error("Main error handler has received an exception: " + str(e))
 except KeyboardInterrupt:
+    logger.info("Received KeyboardInterrupt - terminating ...")
     print("Exit execution due to keyboard interruption.")
