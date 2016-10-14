@@ -34,7 +34,7 @@ class BGPKeepaliveMessage(BGPMessage):
 
         # Check for message length as this is the only possible check we can run on KEEPALIVE messages
         if self.length is not BGPStatics.KEEPALIVE_FIXED_LENGTH:
-            logger.warning("KEEPALIVE message is " + str(self.length) + " bytes long, but mandatory length of KEEPALIVE messages is " + str(BGPStatics.KEEPALIVE_FIXED_LENGTH) + "bytes.")
+            logger.warning("KEEPALIVE message is " + str(self.length) + " bytes long, but mandatory length of KEEPALIVE messages is " + str(BGPStatics.KEEPALIVE_FIXED_LENGTH) + " bytes.")
             self.error = True
         else:
             self.error = False
