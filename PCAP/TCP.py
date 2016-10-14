@@ -23,7 +23,14 @@ from PCAP.Information import PCAPLayer4Information
 
 
 class PCAPTCP:
-    BITMASK_FLAGS = 0xfff
+    FIN = 0x01
+    SYN = 0x02
+    RST = 0x04
+    PSH = 0x08
+    ACK = 0x10
+    URG = 0x20
+    ECE = 0x40
+    CWR = 0x80
 
     def __init__(self, payload):
         # Assign variables
@@ -33,8 +40,16 @@ class PCAPTCP:
         self.seq = None
         self.ack = None
 
+        self.flag_fin = False
+        self.flag_syn = False
+        self.flag_rst = False
+        self.flag_psh = False
+        self.flag_ack = False
+        self.flag_urg = False
+        self.flag_ece = False
+        self.flag_cwr = False
+
         self.header_length = None
-        self.flags = None
         self.window_size_value = None
         self.checksum = None
         self.urgent_pointer = None
@@ -54,7 +69,31 @@ class PCAPTCP:
 
         length_flags = struct.unpack("!H", self.payload[12:14])[0]
         self.header_length = (length_flags >> 12) * 4
-        self.flags = (length_flags & self.BITMASK_FLAGS)
+
+        tcp_flags = struct.unpack("!B", self.payload[13:14])[0]
+        if tcp_flags & self.FIN:
+            self.flag_fin = True
+
+        if tcp_flags & self.SYN:
+            self.flag_syn = True
+
+        if tcp_flags & self.RST:
+            self.flag_rst = True
+
+        if tcp_flags & self.PSH:
+            self.flag_psh = True
+
+        if tcp_flags & self.ACK:
+            self.flag_ack = True
+
+        if tcp_flags & self.URG:
+            self.flag_urg = True
+
+        if tcp_flags & self.ECE:
+            self.flag_ece = True
+
+        if tcp_flags & self.CWR:
+            self.flag_cwr = True
 
     def get_ports(self):
         return self.ports
@@ -67,9 +106,6 @@ class PCAPTCP:
 
     def get_header_length(self):
         return self.header_length
-
-    def get_flags(self):
-        return self.flags
 
     def get_window_size_value(self):
         return self.window_size_value
