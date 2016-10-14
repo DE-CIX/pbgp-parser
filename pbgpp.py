@@ -63,7 +63,7 @@ group_4.add_argument("--filter-destination-ip", help="only print messages contai
 group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_destination_mac")
 
 group_5 = parser.add_argument_group("line output commands")
-group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma", dest="fields", default="message.timestamp,message.type,message.ip.source,message.ip.destination")
+group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma", dest="fields", default="message.timestamp,message.type,update.nlri")
 
 group_6 = parser.add_argument_group("other commands")
 group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
