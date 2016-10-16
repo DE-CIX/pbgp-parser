@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+import logging
 import struct
 
 from BGP.Exceptions import BGPMessageFactoryError
@@ -101,6 +101,8 @@ class BGPMessage:
 
     @staticmethod
     def factory(payload, pcap_information):
+        logger = logging.getLogger("pbgpp.BGPMessage.factory")
+
         # Implement factory pattern for easy message class creation
         # First 2 bytes of BGP header is the message length
         # The byte after message length is the message type
@@ -108,10 +110,16 @@ class BGPMessage:
             bgp_header = struct.unpack("!HB", payload[:3])
         except Exception as e:
             # This could happen on a malformed packet
+            logger.debug("Unpacking first 3 bytes of BGP message (length and type) failed.")
             raise BGPMessageFactoryError("given payload has no valid message type.")
 
         message_length = bgp_header[0]
         message_type = bgp_header[1]
+
+        # Plausibility-check for BGP messages
+        if message_length is not (len(payload) + 16):
+            logger.warning("The unpacked message length does not equal the real payload length.")
+            raise BGPMessageFactoryError("parsed message length does not equal real payload length.")
 
         if message_type == BGPStatics.MESSAGE_TYPE_UPDATE:
             from BGP.Update.Message import BGPUpdateMessage
@@ -134,4 +142,5 @@ class BGPMessage:
             return BGPRouteRefreshMessage(payload[3:], message_length, pcap_information)
 
         # No type match
+        logger.warning("Factory could not recognize message type")
         raise BGPMessageFactoryError("given payload has no valid message type.")
