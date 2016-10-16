@@ -74,6 +74,15 @@ class LineBasedFormatter(BGPFormatter):
 
         self.separator = separator
 
+    @staticmethod
+    def available_fields():
+        output = ""
+
+        for field in LineBasedFormatter.REGISTERED_FIELDS:
+            output += ", " + field
+
+        return output[2:]
+
     def apply(self, message):
         r = ""
 
