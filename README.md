@@ -14,15 +14,23 @@ Potential output targets are: stdout, file, and streams to Apache Kafka.
 ## Usage
 You may use `--help` argument to view all available options and arguments. The most simple usage example reads a PCAP file from standard in, produces a human readable output and pipes it back to standard out:
 
-    cat /path/to/file.pcap | pbgpp.py -
+    cat /path/to/file.pcap | pbgpp.py --quiet -
     
 Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command.
 
-    cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
+    cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL --quiet -
     
 To pipe your output directly into a file you can use the following command. Of course you are able to combine it with filters or different input methods, like reading from a PCAP file.
 
-    cat /path/to/file.pcap | pbgpp.py -p FILE -o output.txt -
+    cat /path/to/file.pcap | pbgpp.py -p FILE -o output.txt --quiet -
+
+## Logging
+pbgpp is producing logging output while parsing your PCAP input. You have several options to handle those logging output. To disable the whole logging output use the `--quiet` argument. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously it can not be used in combination with the `--quiet` argument. By default pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
+
+    # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
+    cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
+    
+If you are not using stream redirection in combination with verbosive or normal logging level you won't be able to separate parsing output from logging output.
 
 ## Contributions
 Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
