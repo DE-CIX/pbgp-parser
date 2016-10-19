@@ -38,7 +38,7 @@ Currently the parser is not able to perform a reassembly on fragmented TCP packe
 ## Contributions
 Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
 
-If you have any other kind of inquiries feel free to contact our research and development team: rnd <at> de-cix <dot> net
+If you have any other kind of inquiries feel free to contact our research and development team: rnd <>at<> de-cix <>dot<> net
 
 ## Copyright, License & Credits
 PCAP BGP Parser (pbgpp) - Copyright (C) 2016, DE-CIX Management GmbH.
