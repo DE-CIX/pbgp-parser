@@ -70,11 +70,9 @@ group_6 = parser.add_argument_group("other commands")
 group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
 group_6.add_argument("--progress", help="displays the current progress - only applicable when using pcap file as input source and writing to file or Kafka", action="store_true", dest="progress")
 
-logger.info("Initializing runtime handler ...")
 main_handler = PBGPPHandler(parser)
 
 try:
-    logger.info("Calling main handler ...")
     main_handler.handle()
 except Exception as e:
     logger.error("Main error handler has received an exception: " + str(e))

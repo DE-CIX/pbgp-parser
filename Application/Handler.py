@@ -83,7 +83,8 @@ class PBGPPHandler:
             sys.exit(0)
 
         if self.args.quiet:
-            self.quiet = True
+            # 60 is higher then CRITICAL log level
+            logging.getLogger().setLevel(60)
 
         if self.args.verbose:
             logging.getLogger().setLevel(logging.DEBUG)
