@@ -235,7 +235,9 @@ class PBGPPHandler:
         elif self.args.pipe == "STDOUT":
             self.pipe = StdOutPipe()
         elif self.args.pipe == "KAFKA":
-            self.pipe = KafkaPipe()
+            if self.args.kafka_server is None or self.args.kafka_topic is None:
+                self.__parser.error("You need to specify Kafka server (--kafka-server) and topic (--kafka-topic) when using KAFKA as output pipe.")
+            self.pipe = KafkaPipe(server=self.args.kafka_server, topic=self.args.kafka_topic)
         else:
             self.__parser.error("Can't recognize the output pipe.")
 

@@ -16,9 +16,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+from kafka import KafkaProducer
 
 from Output.Pipe import BGPPipe
 
 
 class KafkaPipe(BGPPipe):
-    pass
+    def __init__(self, server, topic):
+        # Kafka server initialization
+        self.server = server
+        self.topic = topic
+
+        # Class specific variables
+        self.handle = KafkaProducer(bootstrap_servers=server)
+
+    def __del__(self):
+        try:
+            self.handle.flush()
+            self.handle.close()
+        except Exception as e:
+            # Could not gracefully shutdown Kafka connection
+            pass
+
+    def output(self, output):
+        self.handle.send(self.topic, output)
