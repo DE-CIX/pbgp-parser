@@ -26,6 +26,7 @@ from Output.Formatters.LineBased import LineBasedFormatter
 
 logger = logging.getLogger('pbgpp')
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.getLogger().setLevel(60)
 
 parser = argparse.ArgumentParser(description="detailed bgp packet message parsing from PCAP files or direct network traffic")
 
