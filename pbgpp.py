@@ -46,8 +46,8 @@ group_2.add_argument("-q", "--quiet", help="only show parsing output", action="s
 group_2.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true", dest="verbose")
 
 group_3 = parser.add_argument_group("kafka configuration")
-group_3.add_argument("--kafka-server", help="IP address and port of the target kafka server if your output type is set to KAFKA", dest="kafka_server")
-group_3.add_argument("--kafka-topic", help="topic of kafka server if your output type is set to KAFKA", dest="kafka_topic")
+group_3.add_argument("--kafka-server", help="IP address / hostname (and port if it's different from 9092) of the target Apache Kafka server if your output type is set to KAFKA (e.g. 127.0.0.1:9092)", dest="kafka_server")
+group_3.add_argument("--kafka-topic", help="topic of Apache Kafka server if your output type is set to KAFKA (e.g. pbgpp)", dest="kafka_topic")
 
 group_4 = parser.add_argument_group("filters")
 group_4.add_argument("--filter-timestamp", help="only print messages with given epoch timestamp (e.g., 123456789)", nargs="+", action="append", dest="filter_timestamp")
