@@ -27,25 +27,24 @@ from Output.Formatter import BGPFormatter
 
 
 class LineBasedFormatter(BGPFormatter):
-    FIELD_MESSAGE_TIMESTAMP = "message.timestamp"
-    FIELD_MESSAGE_IP_SOURCE = "message.ip.source"
-    FIELD_MESSAGE_IP_DESTINATION = "message.ip.destination"
-    FIELD_MESSAGE_MAC_SOURCE = "message.mac.source"
-    FIELD_MESSAGE_MAC_DESTINATION = "message.mac.destination"
-    FIELD_MESSAGE_LENGTH = "message.length"
-    FIELD_MESSAGE_TYPE = "message.type"
+    FIELD_MESSAGE_TIMESTAMP = "timestamp"
+    FIELD_MESSAGE_IP_SOURCE = "source_ip"
+    FIELD_MESSAGE_IP_DESTINATION = "destination_ip"
+    FIELD_MESSAGE_MAC_SOURCE = "source_mac"
+    FIELD_MESSAGE_MAC_DESTINATION = "destination_mac"
+    FIELD_MESSAGE_LENGTH = "length"
+    FIELD_MESSAGE_TYPE = "type"
 
-    FIELD_UPDATE_SUBTYPE = "update.subtype"
-    FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH = "update.path_attributes_length"
-    FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = "update.withdrawn_routes_length"
-    FIELD_UPDATE_WITHDRAWN_ROUTES = "update.withdrawn_routes"
-    FIELD_UPDATE_NLRI = "update.nlri"
-    FIELD_UPDATE_ATTRIBUTE_ORIGIN = "update.attribute.origin"
-    FIELD_UPDATE_ATTRIBUTE_AS_PATH = "update.attribute.as_path"
-    FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = "update.attribute.as_path.last_asn"
-    FIELD_UPDATE_ATTRIBUTE_NEXT_HOP = "update.attribute.next_hop"
-    FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = "update.attribute.communities"
-    FIELD_UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES = "update.attribute.extended_communities"
+    FIELD_UPDATE_SUBTYPE = "subtype"
+    FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH = "path_attributes_length"
+    FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = "withdrawn_routes_length"
+    FIELD_UPDATE_WITHDRAWN_ROUTES = "withdrawn_routes"
+    FIELD_UPDATE_NLRI = "prefixes"
+    FIELD_UPDATE_ATTRIBUTE_ORIGIN = "origin"
+    FIELD_UPDATE_ATTRIBUTE_AS_PATH = "as_path"
+    FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = "as_path_last_asn"
+    FIELD_UPDATE_ATTRIBUTE_NEXT_HOP = "next_hop"
+    FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = "communities"
 
     REGISTERED_FIELDS = [FIELD_MESSAGE_TIMESTAMP,
                          FIELD_MESSAGE_IP_SOURCE,
@@ -63,12 +62,11 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN,
                          FIELD_UPDATE_ATTRIBUTE_NEXT_HOP,
-                         FIELD_UPDATE_ATTRIBUTE_COMMUNITIES,
-                         FIELD_UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES]
+                         FIELD_UPDATE_ATTRIBUTE_COMMUNITIES]
 
     def __init__(self, fields=None, separator="\t"):
         if not fields:
-            self.fields = ["message.timestamp", "message.type", "message.ip.source", "message.ip.destination"]
+            self.fields = [self.FIELD_MESSAGE_TIMESTAMP, self.FIELD_MESSAGE_TYPE, self.FIELD_UPDATE_SUBTYPE, self.FIELD_UPDATE_NLRI, self.FIELD_UPDATE_WITHDRAWN_ROUTES]
         else:
             self.fields = fields
 
