@@ -16,27 +16,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from kafka import KafkaProducer
+import logging
 
+from kafka import KafkaProducer
+from kafka.errors import KafkaError
+
+from BGP.Exceptions import BGPError
 from Output.Pipe import BGPPipe
 
 
 class KafkaPipe(BGPPipe):
     def __init__(self, server, topic):
+        logger = logging.getLogger("pbgpp.KafkaPipe.__init__")
+
         # Kafka server initialization
         self.server = server
         self.topic = topic
+        self.handle = None
 
         # Class specific variables
-        self.handle = KafkaProducer(bootstrap_servers=server)
-
-    def __del__(self):
         try:
-            self.handle.flush()
-            self.handle.close()
+            self.handle = KafkaProducer(bootstrap_servers=[server])
         except Exception as e:
-            # Could not gracefully shutdown Kafka connection
-            pass
+            logger.error("could not initialize connection to Apache Kafka server. Following exception has been reported: " + str(e))
+            raise BGPError("Could not establish a connection to target pipe (Apache Kafka). Cancelling ...")
 
     def output(self, output):
-        self.handle.send(self.topic, output)
+        if self.handle is not None:
+            self.handle.send(self.topic, bytes(output, "utf-8"))

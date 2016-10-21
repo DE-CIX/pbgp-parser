@@ -21,12 +21,14 @@
 import argparse
 import logging
 
+import sys
+
 from Application.Handler import PBGPPHandler
 from Output.Formatters.LineBased import LineBasedFormatter
 
 logger = logging.getLogger('pbgpp')
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-logging.getLogger().setLevel(60)
+logging.getLogger().setLevel(logging.ERROR)
 
 parser = argparse.ArgumentParser(description="detailed bgp packet message parsing from PCAP files or direct network traffic")
 
@@ -77,6 +79,8 @@ try:
     main_handler.handle()
 except Exception as e:
     logger.error("Main error handler has received an exception: " + str(e))
+    sys.exit(1)
 except KeyboardInterrupt:
     logger.info("Received KeyboardInterrupt - terminating ...")
     print("Exit execution due to keyboard interruption.")
+    sys.exit(0)
