@@ -37,15 +37,17 @@ There are some remarks for the usage of *Apache Kafka* as output target. First o
 Using `-f JSON` or `-f LINE` is highly recommended. The output will be encoded in UTF-8 and sent to your specified target server.
 
 ## Logging
-pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously, it can not be used in combination with the `--quiet` argument. By default pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
+pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously, it can not be used in combination with the `--quiet` argument. By default, pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
 
     # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
     cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
     
-*Note*, if you are not using stream redirection in combination with verbosive or normal logging level you won't be able to separate parsing output from logging output.
+**Note**, if you are not using stream redirection in combination with verbose or normal logging level you won't be able to separate parsing output from logging output.
 
 ## Limitations
 Currently, the parser doesn't perform a reassembly on fragmented TCP packets. This may leads into parsing errors and application warnings when you are trying to parse large BGP packets with several messages.
+
+Currently, we are looking into some problems with running pbgpp with Python 2.7 and streaming the output to Kafka. However, Python 3.x works just fine.
 
 ## Contributions
 Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page on GitHub for further information.
