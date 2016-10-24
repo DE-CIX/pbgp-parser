@@ -30,25 +30,25 @@ To pipe your output directly into a file you can use the following command. Of c
 
     cat /path/to/file.pcap | pbgpp.py -p FILE -o output.txt -
 
-There are some remarks for the usage of *Apache Kafka* as output pipe. First of all use the `-p KAFKA` argument to set the output pipe. In addition to that you must specify the target Apache Kafka server and topic. Port 9092 is default and does not need to be specified.
+There are some remarks for the usage of *Apache Kafka* as output target. First of all use the `-p KAFKA` argument to set the output pipe. In addition, you must specify the target Apache Kafka server and topic. Port 9092 is the default and does not need to be specified.
 
     cat /path/to/file.pcap | pbgpp.py -p KAFKA --kafka-server 127.0.0.1 --kafka-topic pbgpp -f JSON -
     
 Using `-f JSON` or `-f LINE` is highly recommended. The output will be encoded in UTF-8 and sent to your specified target server.
 
 ## Logging
-pbgpp is producing logging output while parsing your PCAP input. You have several options to handle those logging output. To disable the whole logging output use the `--quiet` argument which is done by default. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously it can not be used in combination with the `--quiet` argument. By default pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
+pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously, it can not be used in combination with the `--quiet` argument. By default pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
 
     # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
     cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
     
-If you are not using stream redirection in combination with verbosive or normal logging level you won't be able to separate parsing output from logging output.
+*Note*, if you are not using stream redirection in combination with verbosive or normal logging level you won't be able to separate parsing output from logging output.
 
 ## Limitations
-Currently the parser is not able to perform a reassembly on fragmented TCP packets. This could lead into parsing errors and application warnings when you are trying to parse large BGP packets with several messages.
+Currently, the parser doesn't perform a reassembly on fragmented TCP packets. This may leads into parsing errors and application warnings when you are trying to parse large BGP packets with several messages.
 
 ## Contributions
-Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page in GitHub for further information.
+Feel free to contribute your own extensions, enhancements, or even fixes. Check out the issues page on GitHub for further information.
 
 If you have any other kind of inquiries feel free to contact our research and development team: rnd <>at<> de-cix <>dot<> net
 
