@@ -1,4 +1,4 @@
-![pbgpp Logo](logo_pbgpp.png)
+![pbgpp Logo](https://github.com/de-cix/pbgp-parser/blob/master/logo_pbgp.png)
 
 # PCAP BGP Parser (pbgpp)
 DE-CIX developed a PCAP parser for analyzing BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or directly from network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
