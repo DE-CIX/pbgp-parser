@@ -1,10 +1,10 @@
 ![pbgpp Logo](https://github.com/de-cix/pbgp-parser/blob/master/logo_pbgp.png)
 
 # PCAP BGP Parser (pbgpp)
-DE-CIX developed a PCAP parser for analyzing BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or directly from network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
+DE-CIX developed a PCAP parser to decode BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or by listening on a network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
 
 ## Why not Wireshark?
-Wireshark is an awesome tool! Unfortunatly, it only offers an graphical interface that does not satisfy our requirements, e.g., existing BGP filters are limited to some fields. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way.
+Wireshark is an awesome tool! Unfortunately, it only offers an graphical interface that does not satisfy our requirements, e.g., existing BGP filters are limited to some fields. Also tshark as command line version of Wireshark was not able to output the parsed BGP messages in a toolchain-friendly way.
 
 ## Available inputs, formatters, and pipes
 The parser is able to read PCAP from: File and standard input (stdin) - soon it will be able to read live packages directly from network interface.
@@ -22,7 +22,7 @@ You may use `--help` argument to view all available options and arguments. The m
 
     cat /path/to/file.pcap | pbgpp.py -
     
-Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals just use the following command.
+Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals use the following command.
 
     cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
     
@@ -37,7 +37,7 @@ There are some remarks for the usage of *Apache Kafka* as output target. First o
 Using `-f JSON` or `-f LINE` is highly recommended. The output will be encoded in UTF-8 and sent to your specified target server.
 
 ## Logging
-pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more verbosive output. Obviously, it can not be used in combination with the `--quiet` argument. By default, pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
+pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more detailed output. Obviously, it can not be used in combination with the `--quiet` argument. By default, pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
 
     # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
     cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
@@ -60,3 +60,4 @@ PCAP BGP Parser (pbgpp) - Copyright (C) 2016, DE-CIX Management GmbH.
 PCAP BGP Parser (pbgpp) is published under Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0).
 
 This product includes software developed by CORE Security Technologies (http://www.coresecurity.com/).
+*
