@@ -223,6 +223,8 @@ class BGPTranslation:
                 return "BGP-LS Attribute"
             elif value == BGPStatics.UPDATE_ATTRIBUTE_ATTR_SET:
                 return "ATTR_SET"
+            elif value == BGPStatics.UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
+                return "LARGE_COMMUNITIES"
             else:
                 return "Unknown"
         except Exception as e:

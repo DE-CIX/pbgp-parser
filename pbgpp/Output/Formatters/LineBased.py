@@ -21,6 +21,7 @@ from pbgpp.BGP.Statics import BGPStatics
 from pbgpp.BGP.Translation import BGPTranslation
 from pbgpp.BGP.Update.PathAttributes.ASPath import PathAttributeASPath
 from pbgpp.BGP.Update.PathAttributes.Communities import PathAttributeCommunities
+from pbgpp.BGP.Update.PathAttributes.LargeCommunities import PathAttributeLargeCommunities
 from pbgpp.BGP.Update.PathAttributes.NextHop import PathAttributeNextHop
 from pbgpp.BGP.Update.PathAttributes.Origin import PathAttributeOrigin
 from pbgpp.Output.Formatter import BGPFormatter
@@ -45,6 +46,7 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = "as_path_last_asn"
     FIELD_UPDATE_ATTRIBUTE_NEXT_HOP = "next_hop"
     FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = "communities"
+    FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES = "large_communities"
 
     REGISTERED_FIELDS = [FIELD_MESSAGE_TIMESTAMP,
                          FIELD_MESSAGE_IP_SOURCE,
@@ -62,7 +64,8 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN,
                          FIELD_UPDATE_ATTRIBUTE_NEXT_HOP,
-                         FIELD_UPDATE_ATTRIBUTE_COMMUNITIES]
+                         FIELD_UPDATE_ATTRIBUTE_COMMUNITIES,
+                         FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES]
 
     def __init__(self, fields=None, separator="\t"):
         if not fields:
@@ -197,16 +200,22 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES:
+            elif f == self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f == self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
                         for attribute in message.path_attributes:
                             # We found the correct path attribute
+                            communities = None
                             if isinstance(attribute, PathAttributeCommunities):
-                                if len(attribute.communities) > 0:
+                                communities = attribute.communities
+                            elif isinstance(attribute, PathAttributeLargeCommunities):
+                                communities = attribute.large_communities
+
+                            if communities:
+                                if len(communities) > 0:
                                     add = ""
-                                    for community in attribute.communities:
+                                    for community in communities:
                                         add += ";" + str(community)
 
                                     r += self.separator + add[1:]

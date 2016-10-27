@@ -66,6 +66,7 @@ def main():
     group_4.add_argument("--filter-source-mac", help="only print messages containing the given source MAC address (e.g., 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_source_mac")
     group_4.add_argument("--filter-destination-ip", help="only print messages containing the given destination IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_destination_ip")
     group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_destination_mac")
+    group_4.add_argument("--filter-large-community", help="only print messages containing one or more matching large communities (e.g., '11:22:33', '11:*:*', '*:22:33')", nargs="+", action="append", dest="filter_large_community")
 
     group_5 = parser.add_argument_group("line output commands")
     group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma. Available fields are: " + LineBasedFormatter.available_fields(), dest="fields", default=LineBasedFormatter.FIELD_MESSAGE_TIMESTAMP + "," + LineBasedFormatter.FIELD_MESSAGE_TYPE + "," + LineBasedFormatter.FIELD_UPDATE_SUBTYPE + "," + LineBasedFormatter.FIELD_UPDATE_NLRI + "," + LineBasedFormatter.FIELD_UPDATE_WITHDRAWN_ROUTES)
