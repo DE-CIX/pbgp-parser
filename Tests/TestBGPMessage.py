@@ -19,8 +19,8 @@
 
 import unittest
 
-from BGP.Statics import BGPStatics
-from BGP.Message import BGPMessage
+from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Message import BGPMessage
 
 
 class TestBGPMessage(unittest.TestCase):
