@@ -170,5 +170,9 @@ class BGPPathAttribute:
             from pbgpp.BGP.Update.PathAttributes.TunnelEncapsulation import PathAttributeTunnelEncapsulation
             return PathAttributeTunnelEncapsulation(payload)
 
+        if attribute_type == BGPStatics.UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
+            from pbgpp.BGP.Update.PathAttributes.LargeCommunities import PathAttributeLargeCommunities
+            return PathAttributeLargeCommunities(payload)
+
         from pbgpp.BGP.Update.PathAttributes.Unknown import PathAttributeUnknown
         return PathAttributeUnknown(payload)

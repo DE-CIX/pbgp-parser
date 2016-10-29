@@ -28,6 +28,7 @@ from pbgpp.BGP.Packet import BGPPacket
 from pbgpp.Output.Filters.ASNFilter import ASNFilter
 from pbgpp.Output.Filters.CommunityASNFilter import CommunityASNFilter
 from pbgpp.Output.Filters.CommunityValueFilter import CommunityValueFilter
+from pbgpp.Output.Filters.LargeCommunityFilter import LargeCommunityFilter
 from pbgpp.Output.Filters.IPDestinationFilter import IPDestinationFilter
 from pbgpp.Output.Filters.IPSourceFilter import IPSourceFilter
 from pbgpp.Output.Filters.LastASNFilter import LastASNFilter
@@ -179,6 +180,12 @@ class PBGPPHandler:
             filters = list(chain(*values))
             self.filters.append(CommunityValueFilter(filters))
             logger.debug("Added " + str(len(filters)) + " filter(s) of CommunityValueFilter")
+
+        if self.args.filter_large_community:
+            values = self.args.filter_large_community
+            filters = list(chain(*values))
+            self.filters.append(LargeCommunityFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of LargeCommunityFilter")
 
         if self.args.filter_message_size:
             values = self.args.filter_message_size
