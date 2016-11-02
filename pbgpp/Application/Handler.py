@@ -45,9 +45,9 @@ from pbgpp.Output.Formatters.HumanReadable import HumanReadableFormatter
 from pbgpp.Output.Formatters.JSON import JSONFormatter
 from pbgpp.Output.Formatters.LineBased import LineBasedFormatter
 from pbgpp.Output.Handler import OutputHandler
-from pbgpp.Output.Pipes.File import FilePipe
-from pbgpp.Output.Pipes.Kafka import KafkaPipe
-from pbgpp.Output.Pipes.StdOut import StdOutPipe
+from pbgpp.Output.Pipes.FilePipe import FilePipe
+from pbgpp.Output.Pipes.KafkaPipe import KafkaPipe
+from pbgpp.Output.Pipes.StdOutPipe import StdOutPipe
 from pbgpp.PCAP.Ethernet import PCAPEthernet
 from pbgpp.PCAP.IP import PCAPIP
 from pbgpp.PCAP.Information import PCAPInformation
