@@ -249,7 +249,9 @@ class PBGPPHandler:
             self.__parser.error("Can't recognize the output pipe.")
 
     def __handle_interface(self):
-        raise NotImplemented
+        # This is experimental! Not verified, yet.
+        handle = pcapy.open_live(self.args.interface, 65536, 1, 0)
+        handle.loop(0, self.__packet_handler)
 
     def __handle_pcap(self):
         handle = pcapy.open_offline(self.args.pcap)
