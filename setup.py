@@ -10,9 +10,10 @@ setup(
     version='0.2.0',
     description='PCAP BGP Parser',
     author='DE-CIX Management GmbH',
+    author_email='rnd@de-cix.net',
     url='https://github.com/de-cix/pbgp-parser',
-    keywords='bgp parsing pcap',
-    license='Apache',
+    keywords=['bgp', 'parsing', 'pcap'],
+    license='Apache License 2.0',
 
     zip_safe=False,
     packages=packages,
