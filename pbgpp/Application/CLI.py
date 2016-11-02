@@ -26,6 +26,7 @@ import sys
 from pbgpp.Application.Handler import PBGPPHandler
 from pbgpp.Output.Formatters.LineBased import LineBasedFormatter
 
+
 def main():
     logger = logging.getLogger('pbgpp')
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")

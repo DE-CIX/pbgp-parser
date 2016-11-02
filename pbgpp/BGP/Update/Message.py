@@ -186,8 +186,7 @@ class BGPUpdateMessage(BGPMessage):
                     except BGPError as e:
                         raise BGPNLRIError("can't append NLRI to message (error: " + str(e) + ")")
 
-                    if (current_byte_position + 19) >= len(self.payload):
-                        # 19 Byte = Marker (16 bytes) + Message Length (2 bytes) + Message Type (1 byte)
+                    if current_byte_position >= len(self.payload):
                         continue_loop = False
 
             # Determine sub-type for filtering
