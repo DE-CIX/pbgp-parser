@@ -14,9 +14,9 @@ The parser is able to format the parsed BGP messages into: a human-readable form
 Potential output targets are: stdout, file, and streams to Apache Kafka.
 
 ## Usage
-First of all please make sure that your system meets the application requirements by using PyPA pip. Furthermore pbgpp requires Python 3.
+You are able to install pbgpp by using PyPI. To do so please make sure that you have installed the `libpcap-dev` packet for your operating system. Otherwise compiling pcapy will fail.
 
-    pip install -r requirements.txt
+    sudo pip install pbgpp
 
 You may use `--help` argument to view all available options and arguments. The most simple usage example reads a PCAP file from standard in, produces a human readable output and pipes it back to standard out:
 
@@ -36,7 +36,7 @@ There are some remarks for the usage of *Apache Kafka* as output target. First o
     
 Using `-f JSON` or `-f LINE` is highly recommended. The output will be encoded in UTF-8 and sent to your specified target server.
 
-Finally, you can install the package as a system command-line tool:
+Finally, you can install the package as a system command-line tool by using setuptools:
 
     python setup.py install
 
