@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 import logging
+import sys
 
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
@@ -43,4 +44,7 @@ class KafkaPipe(BGPPipe):
 
     def output(self, output):
         if self.handle is not None:
-            self.handle.send(self.topic, bytes(output, "utf-8"))
+            if sys.version_info[0] < 3:
+                self.handle.send(self.topic, output)
+            else:
+                self.handle.send(self.topic, bytes(output, "utf-8"))
