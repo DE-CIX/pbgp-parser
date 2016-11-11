@@ -2,7 +2,7 @@
 
 # PCAP BGP Parser (pbgpp)
 [![PyPI version](https://badge.fury.io/py/pbgpp.svg)](https://badge.fury.io/py/pbgpp)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/de-cix/pbgp-parser)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/de-cix/pbgp-parser/blob/master/LICENSE.txt)
 
 DE-CIX developed a PCAP parser to decode BGP messages collected with tcpdump. The parser reads PCAP input from file system, stdin, or by listening on a network interface. Furthermore, the parser is able to use several output filters and pipes to tailor the output for your individual needs. Therefore, we decided to develop *PCAP BGP Parser* aka *pbgpp*. The filters and pipes can be easily extended - we are happy to include your extensions any time :)
 
