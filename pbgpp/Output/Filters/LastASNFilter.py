@@ -42,7 +42,7 @@ class LastASNFilter(BGPFilter):
                 for path_segment in attribute.path_segments:
                     segment_asn = path_segment.segments[-1:]
                     for value in self.values:
-                        if str(segment_asn) == str(value):
+                        if str(segment_asn[0]) == str(value):
                             return message
 
             # Searched value was not found
