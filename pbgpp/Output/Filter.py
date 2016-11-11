@@ -25,7 +25,3 @@ class BGPFilter:
 
     def __init__(self, values=[]):
         self.values = values
-
-    @classmethod
-    def factory(cls, filter_type, values):
-        pass
