@@ -28,23 +28,32 @@ class MessageTypeFilter(BGPFilter):
     def apply(self, message):
         try:
             for value in self.values:
-                if value == "RESERVED" or "0":
+                negated = False
+
+                if value[0:1] == "~":
+                    negated = True
+                    value = value[1:]
+
+                if value == "RESERVED" or value == "0":
                     check_value = BGPStatics.MESSAGE_TYPE_RESERVED
-                elif value == "OPEN" or "1":
+                elif value == "OPEN" or value == "1":
                     check_value = BGPStatics.MESSAGE_TYPE_OPEN
-                elif value == "UPDATE" or "2":
+                elif value == "UPDATE" or value == "2":
                     check_value = BGPStatics.MESSAGE_TYPE_UPDATE
-                elif value == "NOTIFICATION" or "3":
+                elif value == "NOTIFICATION" or value == "3":
                     check_value = BGPStatics.MESSAGE_TYPE_NOTIFICATION
-                elif value == "KEEPALIVE" or "4":
+                elif value == "KEEPALIVE" or value == "4":
                     check_value = BGPStatics.MESSAGE_TYPE_KEEPALIVE
-                elif value == "ROUTE-REFRESH" or "ROUTEREFRESH" or "5":
+                elif value == "ROUTE-REFRESH" or value == "ROUTEREFRESH" or value == "5":
                     check_value = BGPStatics.MESSAGE_TYPE_ROUTE_REFRESH
                 else:
                     return None
 
-                if message.type == check_value:
+                if not negated and message.type == check_value:
                     # Match on message type
+                    return message
+
+                if negated and message.type != check_value:
                     return message
 
             # Searched value was not found

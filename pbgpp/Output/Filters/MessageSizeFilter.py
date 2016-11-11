@@ -31,6 +31,9 @@ class MessageSizeFilter(BGPFilter):
                 if int(message.length) == int(v):
                     return message
 
+                if v[0:1] == "~" and (int(v[1:]) != int(message.length)):
+                    return message
+
             # Searched value was not found
             return None
         except Exception as e:

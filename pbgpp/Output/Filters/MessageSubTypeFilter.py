@@ -32,6 +32,12 @@ class MessageSubTypeFilter(BGPFilter):
                 return None
 
             for value in self.values:
+                negated = False
+
+                if value[0:1] == "~":
+                    negated = True
+                    value = value[1:]
+
                 if value == "WITHDRAWAL":
                     check_value = BGPStatics.UPDATE_TYPE_WITHDRAWAL
                 elif value == "ANNOUNCE":
@@ -43,8 +49,11 @@ class MessageSubTypeFilter(BGPFilter):
                 else:
                     return None
 
-                if message.subtype == check_value:
+                if not negated and message.subtype == check_value:
                     # Match on message type
+                    return message
+
+                if negated and message.subtype != check_value:
                     return message
 
             # Searched value was not found
