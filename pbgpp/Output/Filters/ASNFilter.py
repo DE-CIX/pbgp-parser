@@ -41,10 +41,15 @@ class ASNFilter(BGPFilter):
                     continue
 
                 for path_segment in attribute.path_segments:
-                    for segment in path_segment.segments:
-                        for value in self.values:
-                            if str(segment) == str(value):
-                                return message
+                    asn = list(map(str, path_segment.segments))
+
+                    for value in self.values:
+                        if value in asn:
+                            return message
+
+                        # Negative filtering using ~ character
+                        if value[0:1] == "~" and value[1:] not in asn:
+                            return message
 
             # Searched value was not found
             return None

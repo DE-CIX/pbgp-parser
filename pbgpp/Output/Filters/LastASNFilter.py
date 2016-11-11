@@ -45,6 +45,10 @@ class LastASNFilter(BGPFilter):
                         if str(segment_asn[0]) == str(value):
                             return message
 
+                        # Negative filtering using ~ character
+                        if value[0:1] == "~" and (str(segment_asn[0]) != str(value[1:])):
+                            return message
+
             # Searched value was not found
             return None
         except Exception as e:

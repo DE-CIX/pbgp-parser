@@ -39,12 +39,18 @@ class CommunityASNFilter(BGPFilter):
                 if attribute.type is not BGPStatics.UPDATE_ATTRIBUTE_COMMUNITIES:
                     continue
 
+                communities = []
+
                 for community in attribute.communities:
-                    # Here we found the COMMUNITIES attribute - loop through allowed values
-                    for value in self.values:
-                        if str(community.asn) == str(value):
-                            # Match on COMMUNITY attribute (ASN part) - Return message
-                            return message
+                    communities.append(str(community.asn))
+
+                for value in self.values:
+                    if value in communities:
+                        return message
+
+                    # Negative filtering using ~ character
+                    if value[0:1] == "~" and value[1:] not in communities:
+                        return message
 
             # Searched value was not found
             return None

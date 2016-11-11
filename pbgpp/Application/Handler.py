@@ -79,8 +79,8 @@ class PBGPPHandler:
         logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
 
         if self.args.version:
-            print("pbgpp PCAP BGP Parser v0.2.0")
-            print("Copyright 2016 DE-CIX Management GmbH")
+            print("pbgpp PCAP BGP Parser v0.2.3")
+            print("Copyright 2016, DE-CIX Management GmbH")
             sys.exit(0)
 
         if self.args.quiet:
