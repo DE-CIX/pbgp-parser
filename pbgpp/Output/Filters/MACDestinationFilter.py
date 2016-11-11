@@ -28,11 +28,14 @@ class MACDestinationFilter(BGPFilter):
         # !!! Attention: This is a pre-parsing filter!
         # This filter must be applied BEFORE parsing, otherwise it will unnecessarily slow down
         # the whole application. BGP messages don't have to be parsed when applying that filter
-        # directly after reading BGP
+        # directly after reading PCAP packet header
 
         try:
             for v in self.values:
                 if pcap_information.get_mac().get_destination_string() == v:
+                    return True
+
+                if v[0:1] == "~" and pcap_information.get_mac().get_destination_string() != v[1:]:
                     return True
 
             # Searched value was not found

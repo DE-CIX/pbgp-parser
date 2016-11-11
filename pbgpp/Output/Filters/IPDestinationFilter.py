@@ -35,6 +35,9 @@ class IPDestinationFilter(BGPFilter):
                 if pcap_information.get_ip().get_destination_string() == v:
                     return True
 
+                if v[0:1] == "~" and pcap_information.get_ip().get_destination_string() != v[1:]:
+                    return True
+
             # Searched value was not found
             return False
         except Exception as e:
