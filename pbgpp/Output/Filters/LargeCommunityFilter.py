@@ -44,6 +44,11 @@ class LargeCommunityFilter(BGPFilter):
 
                     # Here we found the LARGE_COMMUNITIES attribute - loop through allowed values
                     for value in self.values:
+                        negated = False
+                        if value[0:1] == "~":
+                            negated = True
+                            value = value[1:]
+
                         match = True
 
                         value_parts = value.split(":")
@@ -55,8 +60,11 @@ class LargeCommunityFilter(BGPFilter):
                                 match = False
                                 break
 
-                        if match:
+                        if not negated and match:
                             # Match on LARGE_COMMUNITY attribute - Return message
+                            return message
+
+                        if negated and not match:
                             return message
 
             # Searched value was not found

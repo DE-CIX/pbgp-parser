@@ -41,8 +41,16 @@ class NextHopFilter(BGPFilter):
 
                 # Here we found the NEXT_HOP attribute - loop through allowed values
                 for value in self.values:
-                    if str(BGPRoute.decimal_ip_to_string(attribute.next_hop)) == str(value):
+                    negated = False
+                    if value[0:1] == "~":
+                        negated = True
+                        value = value[1:]
+
+                    if not negated and str(BGPRoute.decimal_ip_to_string(attribute.next_hop)) == str(value):
                         # Match on NEXT_HOP attribute - Return message
+                        return message
+
+                    if negated and str(BGPRoute.decimal_ip_to_string(attribute.next_hop)) != str(value):
                         return message
 
             # Searched value was not found

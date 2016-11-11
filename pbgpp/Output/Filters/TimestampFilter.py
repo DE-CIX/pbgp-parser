@@ -28,15 +28,26 @@ class TimestampFilter(BGPFilter):
         # !!! Attention: This is a pre-parsing filter!
         # This filter must be applied BEFORE parsing, otherwise it will unnecessarily slow down
         # the whole application. BGP messages don't have to be parsed when applying that filter
-        # directly after reading BGP
+        # directly after reading PCAP packet header
 
         try:
             for v in self.values:
+                negated = False
+                if v[0:1] == "~":
+                    negated = True
+                    v = v[1:]
+
                 if "." in v:
-                    if str(pcap_information.get_timestamp()[0]) + "." + str(pcap_information.get_timestamp()[1]) == v:
+                    if not negated and str(pcap_information.get_timestamp()[0]) + "." + str(pcap_information.get_timestamp()[1]) == v:
+                        return True
+
+                    if negated and str(pcap_information.get_timestamp()[0]) + "." + str(pcap_information.get_timestamp()[1]) != v:
                         return True
                 else:
-                    if int(pcap_information.get_timestamp()[0]) == int(v):
+                    if not negated and int(pcap_information.get_timestamp()[0]) == int(v):
+                        return True
+
+                    if negated and int(pcap_information.get_timestamp()[0]) != int(v):
                         return True
 
             # Searched value was not found

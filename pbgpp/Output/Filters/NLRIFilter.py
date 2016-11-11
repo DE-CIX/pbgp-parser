@@ -37,7 +37,15 @@ class NLRIFilter(BGPFilter):
                 for route in message.nlri:
 
                     for value in self.values:
-                        if route.prefix_string == value:
+                        negated = False
+                        if value[0:1] == "~":
+                            negated = True
+                            value = value[1:]
+
+                        if not negated and route.prefix_string == value:
+                            return message
+
+                        if negated and route.prefix_string != value:
                             return message
 
             # Searched value was not found
