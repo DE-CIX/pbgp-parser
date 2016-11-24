@@ -47,6 +47,7 @@ class BGPStatics:
 
     # ** BGPOpenOptionalParameterCapability sub-codes **
     ##
+    CAPABILITY_UNKNOWN = -1
     CAPABILITY_RESERVED = 0
     CAPABILITY_MULTIPROTOCOL_EXTENSIONS = 1
     CAPABILITY_ROUTE_REFRESH = 2

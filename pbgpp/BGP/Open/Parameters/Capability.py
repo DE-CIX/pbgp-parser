@@ -57,10 +57,6 @@ class BGPOptionalParameterCapability(BGPOptionalParameter):
                 if current_byte_position >= len(self.payload):
                     continue_loop = False
 
-        except BGPCapabilityFactoryError as f:
-            # We got a malformed packet - could not recognize capability type
-            logger.warning("BGPCapabilityFactory was not able to recognize parameter type. Exception could be raised due to a malformed message.")
-            self.error = True
         except Exception as e:
             logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
             self.error = True
@@ -134,4 +130,5 @@ class BGPCapability:
             return CapabilityFQDN(payload)
 
         # No type match
-        raise BGPCapabilityFactoryError("given parameter type is not valid")
+        from pbgpp.BGP.Open.Parameters.Capabilities.Unknown import CapabilityUnknown
+        return CapabilityUnknown(payload)
