@@ -19,6 +19,7 @@
 
 from pbgpp.BGP.Open.OptionalParameter import BGPOptionalParameter
 from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Translation import BGPTranslation
 
 
 class BGPOptionalParameterAuthentication(BGPOptionalParameter):
@@ -30,3 +31,9 @@ class BGPOptionalParameterAuthentication(BGPOptionalParameter):
 
     def __parse(self):
         self.parsed = True
+
+    def json(self):
+        return {
+            "type": self.type,
+            "type_string": BGPTranslation.open_parameter(self.type)
+        }

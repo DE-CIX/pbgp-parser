@@ -19,6 +19,7 @@
 
 from pbgpp.BGP.Open.Parameters.Capability import BGPCapability
 from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Translation import BGPTranslation
 
 
 class CapabilityOutboundRouteFilter(BGPCapability):
@@ -29,3 +30,9 @@ class CapabilityOutboundRouteFilter(BGPCapability):
 
     def __parse(self):
         self.parsed = True
+
+    def json(self):
+        return {
+            "capability": self.type,
+            "capability_string": BGPTranslation.capability(self.type)
+        }

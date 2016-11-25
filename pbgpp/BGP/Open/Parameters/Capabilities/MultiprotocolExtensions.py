@@ -22,6 +22,7 @@ import logging
 
 from pbgpp.BGP.Open.Parameters.Capability import BGPCapability
 from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Translation import BGPTranslation
 
 
 class CapabilityMultiprotocolExtensions(BGPCapability):
@@ -51,3 +52,9 @@ class CapabilityMultiprotocolExtensions(BGPCapability):
         except Exception as e:
             logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
             self.error = True
+
+    def json(self):
+        return {
+            "capability": self.type,
+            "capability_string": BGPTranslation.capability(self.type)
+        }

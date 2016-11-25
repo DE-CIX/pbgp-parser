@@ -19,6 +19,7 @@
 
 from pbgpp.BGP.Open.Parameters.Capability import BGPCapability
 from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Translation import BGPTranslation
 
 
 class CapabilityUnknown(BGPCapability):
@@ -33,3 +34,9 @@ class CapabilityUnknown(BGPCapability):
 
     def __str__(self):
         return "Unknown (" + str(self.unknown_type) + ")"
+
+    def json(self):
+        return {
+            "capability": self.unknown_type,
+            "capability_string": BGPTranslation.capability(self.type)
+        }

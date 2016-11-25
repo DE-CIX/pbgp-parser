@@ -50,8 +50,27 @@ class JSONFormatter(BGPFormatter):
         # Currently we just need to add information to OPEN- and UPDATE-messages
         if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
             message_data = {
+                "asn": message.asn,
+                "hold_time": message.hold_time,
+                "identifier": message.identifier,
+                "optional_parameter_length": message.optional_parameter_length,
 
+                "optional_parameters": None
             }
+
+            # Add optional parameters
+            optional_parameters = []
+
+            if len(message.optional_parameter) > 0:
+                for o in message.optional_parameter:
+                    optional_parameters.append(o.json())
+
+            # Assign to message data
+            message_data["optional_parameters"] = optional_parameters
+
+            # Assign message data to return data
+            data["message_data"] = message_data
+
         elif message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
             message_data = {
                 "sub_type_string": BGPTranslation.update_subtype(message.subtype),

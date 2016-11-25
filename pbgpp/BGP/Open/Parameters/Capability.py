@@ -20,9 +20,9 @@
 import logging
 import struct
 
-from pbgpp.BGP.Exceptions import BGPCapabilityFactoryError
 from pbgpp.BGP.Open.OptionalParameter import BGPOptionalParameter
 from pbgpp.BGP.Statics import BGPStatics
+from pbgpp.BGP.Translation import BGPTranslation
 
 
 class BGPOptionalParameterCapability(BGPOptionalParameter):
@@ -60,6 +60,18 @@ class BGPOptionalParameterCapability(BGPOptionalParameter):
         except Exception as e:
             logger.warning("Unspecified error during packet parsing. Exception could be raised due to a malformed message.")
             self.error = True
+
+    def json(self):
+        capabilities = []
+
+        for c in self.capability_list:
+            capabilities.append(c.json())
+
+        return {
+            "type": self.type,
+            "type_string": BGPTranslation.open_parameter(self.type),
+            "capabilities": capabilities
+        }
 
 
 class BGPCapability:
