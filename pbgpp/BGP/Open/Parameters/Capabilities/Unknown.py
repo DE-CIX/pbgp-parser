@@ -22,10 +22,14 @@ from pbgpp.BGP.Statics import BGPStatics
 
 
 class CapabilityUnknown(BGPCapability):
-    def __init__(self, payload):
+    def __init__(self, payload, unknown_type=-1):
         BGPCapability.__init__(self, payload)
         self.type = BGPStatics.CAPABILITY_UNKNOWN
+        self.unknown_type = unknown_type
         self.__parse()
 
     def __parse(self):
         self.parsed = True
+
+    def __str__(self):
+        return "Unknown (" + str(self.unknown_type) + ")"

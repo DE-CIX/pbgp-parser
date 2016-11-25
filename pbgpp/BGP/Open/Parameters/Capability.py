@@ -131,4 +131,4 @@ class BGPCapability:
 
         # No type match
         from pbgpp.BGP.Open.Parameters.Capabilities.Unknown import CapabilityUnknown
-        return CapabilityUnknown(payload)
+        return CapabilityUnknown(payload, unknown_type=capability_type)

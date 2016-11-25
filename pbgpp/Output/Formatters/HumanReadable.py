@@ -80,7 +80,10 @@ class HumanReadableFormatter(BGPFormatter):
 
                         # Process capabilities
                         for capability in parameter.capability_list:
-                            string += self.prefix(2) + BGPTranslation.capability(capability.type) + "\n"
+                            if capability.type is not BGPStatics.CAPABILITY_UNKNOWN:
+                                string += self.prefix(2) + BGPTranslation.capability(capability.type) + "\n"
+                            else:
+                                string += self.prefix(2) + str(capability) + "\n"
 
                     elif parameter.type == BGPStatics.OPEN_AUTHENTICATION:
                         string += self.prefix(1) + "Parameter: Authentication" + "\n"
