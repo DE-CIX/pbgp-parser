@@ -46,7 +46,7 @@ Finally, you can install the package as a system command-line tool by using setu
 This will install the `pbgpp` tool on your system path which is equivalent to `pbgpp.py` in this directory.
 
 ## Logging
-pbgpp is producing logging output while parsing your PCAP input. The default option is `--quite` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more detailed output. Obviously, it can not be used in combination with the `--quiet` argument. By default, pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
+pbgpp is producing logging output while parsing your PCAP input. The default option is `--quiet` and needn't to be specified; it disables the whole logging output. Parsing output, which is piped to stdout, is **not** affected by this argument. By using the `--verbose` argument you switch to more detailed output. Obviously, it can not be used in combination with the `--quiet` argument. By default, pbgpp logs at log level INFO. To separate the log output from the parser output you are able to use stream redirection in \*nix operating systems.
 
     # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
     cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
