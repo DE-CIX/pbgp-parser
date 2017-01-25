@@ -48,6 +48,11 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = "communities"
     FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES = "large_communities"
 
+    FIELD_OPEN_MYASN = "myasn"
+    FIELD_OPEN_HOLD_TIME = "hold_time"
+    FIELD_OPEN_VERSION = "version"
+    FIELD_OPEN_BGP_IDENTIFIER = "bgp_identifier"
+
     REGISTERED_FIELDS = [FIELD_MESSAGE_TIMESTAMP,
                          FIELD_MESSAGE_IP_SOURCE,
                          FIELD_MESSAGE_IP_DESTINATION,
@@ -65,7 +70,11 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN,
                          FIELD_UPDATE_ATTRIBUTE_NEXT_HOP,
                          FIELD_UPDATE_ATTRIBUTE_COMMUNITIES,
-                         FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES]
+                         FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES,
+                         FIELD_OPEN_MYASN,
+                         FIELD_OPEN_HOLD_TIME,
+                         FIELD_OPEN_VERSION,
+                         FIELD_OPEN_BGP_IDENTIFIER]
 
     def __init__(self, fields=None, separator="\t"):
         if not fields:
@@ -90,6 +99,30 @@ class LineBasedFormatter(BGPFormatter):
         for f in self.fields:
             if f == self.FIELD_MESSAGE_TIMESTAMP:
                 r += self.separator + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1])
+            elif f == self.FIELD_OPEN_MYASN:
+                # We can only display this information if we are handling an OPEN message
+                if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
+                    r += self.separator + str(message.asn)
+                else:
+                    r += self.separator
+            elif f == self.FIELD_OPEN_HOLD_TIME:
+                # We can only display this information if we are handling an OPEN message
+                if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
+                    r += self.separator + str(message.hold_time)
+                else:
+                    r += self.separator
+            elif f == self.FIELD_OPEN_VERSION:
+                # We can only display this information if we are handling an OPEN message
+                if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
+                    r = self.separator + str(message.version)
+                else:
+                    r += self.separator
+            elif f == self.FIELD_OPEN_BGP_IDENTIFIER:
+                # We can only display this information if we are handling an OPEN message
+                if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
+                    r += self.separator + str(message.identifier)
+                else:
+                    r += self.separator
             elif f == self.FIELD_MESSAGE_IP_SOURCE:
                 r += self.separator + message.pcap_information.get_ip().get_source_string()
             elif f == self.FIELD_MESSAGE_IP_DESTINATION:
