@@ -41,6 +41,7 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = "withdrawn_routes_length"
     FIELD_UPDATE_WITHDRAWN_ROUTES = "withdrawn_routes"
     FIELD_UPDATE_NLRI = "prefixes"
+    FIELD_UPDATE_NLRI_LENGTH = "prefix_length"
     FIELD_UPDATE_ATTRIBUTE_ORIGIN = "origin"
     FIELD_UPDATE_ATTRIBUTE_AS_PATH = "as_path"
     FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = "as_path_last_asn"
@@ -65,6 +66,7 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH,
                          FIELD_UPDATE_WITHDRAWN_ROUTES,
                          FIELD_UPDATE_NLRI,
+                         FIELD_UPDATE_NLRI_LENGTH,
                          FIELD_UPDATE_ATTRIBUTE_ORIGIN,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN,
@@ -183,6 +185,22 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
+            elif f == self.FIELD_UPDATE_NLRI_LENGTH:
+                # We can only display this information if we are handling an UPDATE message
+                if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
+                    if len(message.nlri) > 0:
+                        add = ""
+
+                        for route in message.nlri:
+                            add += ";" + str(route.prefix_length_string)
+
+                        # Skip first separator character
+                        r += self.separator + add[1:]
+                    else:
+                        r += self.separator
+                else:
+                    r += self.separator
+
             elif f == self.FIELD_UPDATE_ATTRIBUTE_ORIGIN:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:

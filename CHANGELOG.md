@@ -11,3 +11,7 @@
 **Version 0.2.5** - Fixing minor version bug
 
 **Version 0.2.6** - Adding JSON formatter for OPEN messages
+
+**Version 0.2.7** - Adding OPEN message fields for line based output (ASN, Hold Time, Version, BGP Identifier)
+ 
+**Version 0.2.8** - Adding prefix length field for line based output
