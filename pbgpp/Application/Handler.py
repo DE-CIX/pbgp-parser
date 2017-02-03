@@ -1,7 +1,7 @@
 #
 # This file is part of PCAP BGP Parser (pbgpp)
 #
-# Copyright 2016 DE-CIX Management GmbH
+# Copyright 2016-2017 DE-CIX Management GmbH
 # Author: Tobias Hannaske <tobias.hannaske@de-cix.net>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,7 +80,7 @@ class PBGPPHandler:
 
         if self.args.version:
             print("pbgpp PCAP BGP Parser v0.2.8")
-            print("Copyright 2016, DE-CIX Management GmbH")
+            print("Copyright 2016-2017, DE-CIX Management GmbH")
             sys.exit(0)
 
         if self.args.quiet:
