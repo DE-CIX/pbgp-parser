@@ -48,6 +48,7 @@ from pbgpp.Output.Handler import OutputHandler
 from pbgpp.Output.Pipes.FilePipe import FilePipe
 from pbgpp.Output.Pipes.KafkaPipe import KafkaPipe
 from pbgpp.Output.Pipes.StdOutPipe import StdOutPipe
+from pbgpp.PCAP.CookedCapture import PCAPCookedCapture
 from pbgpp.PCAP.Ethernet import PCAPEthernet
 from pbgpp.PCAP.IP import PCAPIP
 from pbgpp.PCAP.Information import PCAPInformation
@@ -79,7 +80,7 @@ class PBGPPHandler:
         logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
 
         if self.args.version:
-            print("pbgpp PCAP BGP Parser v0.2.8")
+            print("pbgpp PCAP BGP Parser v0.2.9")
             print("Copyright 2016-2017, DE-CIX Management GmbH")
             sys.exit(0)
 
@@ -267,9 +268,15 @@ class PBGPPHandler:
 
         eth = PCAPEthernet(payload)
 
+        # Check for raw ethernet packet
         if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4:
-            logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 ethernet type.")
-            return False
+
+            # Check for SLL-packet
+            eth = PCAPCookedCapture(payload)
+
+            if not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV4:
+                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 ethernet type.")
+                return False
 
         ip = PCAPIP(eth.get_eth_payload())
 

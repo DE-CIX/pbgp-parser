@@ -82,7 +82,10 @@ class PCAPLayer2Information:
         self.destination = destination
 
     def get_source_string(self, separated=False):
-        output = str(hexlify(self.source).decode("utf-8"))
+        if self.source is None:
+            output = "000000000000"
+        else:
+            output = str(hexlify(self.source).decode("utf-8"))
 
         if separated:
             return output[0:2] + ":" + output[2:4] + ":" + output[4:6] + ":" + output[6:8] + ":" + output[8:10] + ":" + output[10:12]
@@ -90,7 +93,10 @@ class PCAPLayer2Information:
             return output
 
     def get_destination_string(self, separated=False):
-        output = str(hexlify(self.destination).decode("utf-8"))
+        if self.destination is None:
+            output = "000000000000"
+        else:
+            output = str(hexlify(self.destination).decode("utf-8"))
 
         if separated:
             return output[0:2] + ":" + output[2:4] + ":" + output[4:6] + ":" + output[6:8] + ":" + output[8:10] + ":" + output[10:12]

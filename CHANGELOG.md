@@ -15,3 +15,5 @@
 **Version 0.2.7** - Adding OPEN message fields for line based output (ASN, Hold Time, Version, BGP Identifier)
  
 **Version 0.2.8** - Adding prefix length field for line based output
+
+**Version 0.2.9** - Adding SLL-packet support (Linux cooked-packet), Fixing copyright notice
