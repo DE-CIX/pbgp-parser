@@ -23,19 +23,23 @@ You are able to install pbgpp by using PyPI. To do so please make sure that you 
 
 You may use `--help` argument to view all available options and arguments. The most simple usage example reads a PCAP file from standard in, produces a human readable output and pipes it back to standard out:
 
-    cat /path/to/file.pcap | pbgpp.py -
+    cat /path/to/file.pcap | pbgpp -
+    
+Sometime you may want to process many PCAPs at once. The parser is supporting wildcards when using the `--pcap` argument (Make sure you are using the quotes!).
+
+    pbgpp --pcap "/path/to/many/files/2017-02-01*.pcap" -f JSON
     
 Moreover, filtering is pretty straight forward: assuming you just want to display BGP UPDATE messages that are _only_ containing withdrawals use the following command.
 
-    cat /path/to/file.pcap | pbgpp.py --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
+    cat /path/to/file.pcap | pbgpp --filter-message-type UPDATE --filter-message-subtype WITHDRAWAL -
     
 To pipe your output directly into a file you can use the following command. Of course you are able to combine it with filters or different input methods, like reading from a PCAP file.
 
-    cat /path/to/file.pcap | pbgpp.py -p FILE -o output.txt -
+    cat /path/to/file.pcap | pbgpp -p FILE -o output.txt -
 
 There are some remarks for the usage of *Apache Kafka* as output target. First of all use the `-p KAFKA` argument to set the output pipe. In addition, you must specify the target Apache Kafka server and topic. Port 9092 is the default and does not need to be specified.
 
-    cat /path/to/file.pcap | pbgpp.py -p KAFKA --kafka-server 127.0.0.1 --kafka-topic pbgpp -f JSON -
+    cat /path/to/file.pcap | pbgpp -p KAFKA --kafka-server 127.0.0.1 --kafka-topic pbgpp -f JSON -
     
 Using `-f JSON` or `-f LINE` is highly recommended. The output will be encoded in UTF-8 and sent to your specified target server.
 
