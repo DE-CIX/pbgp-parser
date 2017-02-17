@@ -230,7 +230,13 @@ class PBGPPHandler:
         elif self.args.formatter == "HUMAN_READABLE":
             self.formatter = HumanReadableFormatter()
         elif self.args.formatter == "LINE":
-            values = self.args.fields.split(",")
+            # Remove whitespace and split by comma
+            values = self.args.fields.replace(" ", "").split(",")
+
+            for v in values:
+                if v not in LineBasedFormatter.REGISTERED_FIELDS:
+                    self.__parser.error("Could not recognize field '" + str(v) + "' for line based output. Use --help argument to see all available fields.")
+
             self.formatter = LineBasedFormatter(fields=values)
         else:
             self.__parser.error("Can't recognize the formatter.")
