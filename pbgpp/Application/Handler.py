@@ -19,6 +19,8 @@
 
 import logging
 import sys
+import os.path
+import glob
 from itertools import chain
 
 import pcapy
@@ -260,8 +262,23 @@ class PBGPPHandler:
         handle.loop(0, self.__packet_handler)
 
     def __handle_pcap(self):
-        handle = pcapy.open_offline(self.args.pcap)
-        handle.loop(0, self.__packet_handler)
+        logger = logging.getLogger("pbgpp.PBGPPHandler.__handle_pcap")
+
+        if os.path.isfile(self.args.pcap):
+            handle = pcapy.open_offline(self.args.pcap)
+            handle.loop(0, self.__packet_handler)
+        else:
+            logger.info("Given PCAP input string is not direct path to a single file. Checking for glob-argument.")
+
+            files = glob.glob(self.args.pcap)
+            if len(files) == 0:
+                logger.warning("Tried to use glob() on provided --pcap argument but list size is zero.")
+                self.__parser.error("Specified --pcap argument is neither a single file nor a valid wildcard string (no files found!)")
+
+            for f in files:
+                logger.debug("Handling file: " + str(f))
+                handle = pcapy.open_offline(f)
+                handle.loop(0, self.__packet_handler)
 
     def __handle_stdin(self):
         handle = pcapy.open_offline("-")
