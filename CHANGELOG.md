@@ -17,3 +17,5 @@
 **Version 0.2.8** - Adding prefix length field for line based output
 
 **Version 0.2.9** - Adding SLL-packet support (Linux cooked-packet), Fixing copyright notice
+
+**Version 0.2.10** - Adding support for wildcards for pcap file argument, adding field aliases, minor bug fix
