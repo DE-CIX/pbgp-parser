@@ -28,31 +28,31 @@ from pbgpp.Output.Formatter import BGPFormatter
 
 
 class LineBasedFormatter(BGPFormatter):
-    FIELD_MESSAGE_TIMESTAMP = "timestamp"
-    FIELD_MESSAGE_IP_SOURCE = "source_ip"
-    FIELD_MESSAGE_IP_DESTINATION = "destination_ip"
-    FIELD_MESSAGE_MAC_SOURCE = "source_mac"
-    FIELD_MESSAGE_MAC_DESTINATION = "destination_mac"
-    FIELD_MESSAGE_LENGTH = "length"
-    FIELD_MESSAGE_TYPE = "type"
+    FIELD_MESSAGE_TIMESTAMP = ["timestamp"]
+    FIELD_MESSAGE_IP_SOURCE = ["source_ip", "src_ip"]
+    FIELD_MESSAGE_IP_DESTINATION = ["destination_ip", "dst_ip"]
+    FIELD_MESSAGE_MAC_SOURCE = ["source_mac", "src_mac"]
+    FIELD_MESSAGE_MAC_DESTINATION = ["destination_mac", "dst_mac"]
+    FIELD_MESSAGE_LENGTH = ["length"]
+    FIELD_MESSAGE_TYPE = ["type"]
 
-    FIELD_UPDATE_SUBTYPE = "subtype"
-    FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH = "path_attributes_length"
-    FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = "withdrawn_routes_length"
-    FIELD_UPDATE_WITHDRAWN_ROUTES = "withdrawn_routes"
-    FIELD_UPDATE_NLRI = "prefixes"
-    FIELD_UPDATE_NLRI_LENGTH = "prefix_length"
-    FIELD_UPDATE_ATTRIBUTE_ORIGIN = "origin"
-    FIELD_UPDATE_ATTRIBUTE_AS_PATH = "as_path"
-    FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = "as_path_last_asn"
-    FIELD_UPDATE_ATTRIBUTE_NEXT_HOP = "next_hop"
-    FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = "communities"
-    FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES = "large_communities"
+    FIELD_UPDATE_SUBTYPE = ["subtype"]
+    FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH = ["path_attributes_length"]
+    FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = ["withdrawn_routes_length"]
+    FIELD_UPDATE_WITHDRAWN_ROUTES = ["withdrawn_routes", "withdrawn_route", "withdrawals"]
+    FIELD_UPDATE_NLRI = ["prefixes", "prefix", "nlri"]
+    FIELD_UPDATE_NLRI_LENGTH = ["prefix_length"]
+    FIELD_UPDATE_ATTRIBUTE_ORIGIN = ["origin"]
+    FIELD_UPDATE_ATTRIBUTE_AS_PATH = ["as_path"]
+    FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = ["as_path_last_asn"]
+    FIELD_UPDATE_ATTRIBUTE_NEXT_HOP = ["next_hop"]
+    FIELD_UPDATE_ATTRIBUTE_COMMUNITIES = ["communities"]
+    FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES = ["large_communities"]
 
-    FIELD_OPEN_MYASN = "myasn"
-    FIELD_OPEN_HOLD_TIME = "hold_time"
-    FIELD_OPEN_VERSION = "version"
-    FIELD_OPEN_BGP_IDENTIFIER = "bgp_identifier"
+    FIELD_OPEN_MYASN = ["myasn", "my_asn", "asn"]
+    FIELD_OPEN_HOLD_TIME = ["hold_time", "holdtime", "holdtimer", "hold_timer"]
+    FIELD_OPEN_VERSION = ["version"]
+    FIELD_OPEN_BGP_IDENTIFIER = ["bgp_identifier"]
 
     REGISTERED_FIELDS = [FIELD_MESSAGE_TIMESTAMP,
                          FIELD_MESSAGE_IP_SOURCE,
@@ -91,71 +91,80 @@ class LineBasedFormatter(BGPFormatter):
         output = ""
 
         for field in LineBasedFormatter.REGISTERED_FIELDS:
-            output += ", " + field
+            output += ", " + field[0]
 
         return output[2:]
+
+    @staticmethod
+    def is_registered(field):
+        for f in LineBasedFormatter.REGISTERED_FIELDS:
+            for item in f:
+                if item == field:
+                    return True
+
+        return False
 
     def apply(self, message):
         r = ""
 
         for f in self.fields:
-            if f == self.FIELD_MESSAGE_TIMESTAMP:
+            if f in self.FIELD_MESSAGE_TIMESTAMP:
                 r += self.separator + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1])
-            elif f == self.FIELD_OPEN_MYASN:
+            elif f in self.FIELD_OPEN_MYASN:
                 # We can only display this information if we are handling an OPEN message
                 if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
                     r += self.separator + str(message.asn)
                 else:
                     r += self.separator
-            elif f == self.FIELD_OPEN_HOLD_TIME:
+            elif f in self.FIELD_OPEN_HOLD_TIME:
                 # We can only display this information if we are handling an OPEN message
                 if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
                     r += self.separator + str(message.hold_time)
                 else:
                     r += self.separator
-            elif f == self.FIELD_OPEN_VERSION:
+            elif f in self.FIELD_OPEN_VERSION:
                 # We can only display this information if we are handling an OPEN message
                 if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
                     r = self.separator + str(message.version)
                 else:
                     r += self.separator
-            elif f == self.FIELD_OPEN_BGP_IDENTIFIER:
+            elif f in self.FIELD_OPEN_BGP_IDENTIFIER:
                 # We can only display this information if we are handling an OPEN message
                 if message.type == BGPStatics.MESSAGE_TYPE_OPEN:
                     r += self.separator + str(message.identifier)
                 else:
                     r += self.separator
-            elif f == self.FIELD_MESSAGE_IP_SOURCE:
+            elif f in self.FIELD_MESSAGE_IP_SOURCE:
                 r += self.separator + message.pcap_information.get_ip().get_source_string()
-            elif f == self.FIELD_MESSAGE_IP_DESTINATION:
+            elif f in self.FIELD_MESSAGE_IP_DESTINATION:
                 r += self.separator + message.pcap_information.get_ip().get_destination_string()
-            elif f == self.FIELD_MESSAGE_MAC_SOURCE:
+            elif f in self.FIELD_MESSAGE_MAC_SOURCE:
                 r += self.separator + message.pcap_information.get_mac().get_source_string()
-            elif f == self.FIELD_MESSAGE_MAC_DESTINATION:
+            elif f in self.FIELD_MESSAGE_MAC_DESTINATION:
                 r += self.separator + message.pcap_information.get_mac().get_destination_string()
-            elif f == self.FIELD_MESSAGE_LENGTH:
+            elif f in self.FIELD_MESSAGE_LENGTH:
                 r += self.separator + str(message.length)
-            elif f == self.FIELD_MESSAGE_TYPE:
+            elif f in self.FIELD_MESSAGE_TYPE:
                 r += self.separator + BGPTranslation.message_type(message.type)
-            elif f == self.FIELD_UPDATE_SUBTYPE:
+            elif f in self.FIELD_UPDATE_SUBTYPE:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     r += self.separator + BGPTranslation.update_subtype(message.subtype)
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH:
+            elif f in self.FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     r += self.separator + str(message.path_attributes_length)
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH:
+            elif f in self.FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     r += self.separator + str(message.withdrawn_routes_length)
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_WITHDRAWN_ROUTES:
+            elif f in self.FIELD_UPDATE_WITHDRAWN_ROUTES:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.withdrawn_routes) > 0:
@@ -170,7 +179,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_NLRI:
+            elif f in self.FIELD_UPDATE_NLRI:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.nlri) > 0:
@@ -185,7 +194,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_NLRI_LENGTH:
+            elif f in self.FIELD_UPDATE_NLRI_LENGTH:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.nlri) > 0:
@@ -201,7 +210,7 @@ class LineBasedFormatter(BGPFormatter):
                 else:
                     r += self.separator
 
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_ORIGIN:
+            elif f in self.FIELD_UPDATE_ATTRIBUTE_ORIGIN:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
@@ -214,7 +223,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_AS_PATH:
+            elif f in self.FIELD_UPDATE_ATTRIBUTE_AS_PATH:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
@@ -238,7 +247,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_NEXT_HOP:
+            elif f in self.FIELD_UPDATE_ATTRIBUTE_NEXT_HOP:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
@@ -251,7 +260,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f == self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
+            elif f in self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f == self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
@@ -277,7 +286,7 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
-            elif f == self.FIELD_UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES:
+            elif f in self.FIELD_UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES:
                 # @todo Find a good way to display extended communities in just one line
                 r += self.separator
             else:

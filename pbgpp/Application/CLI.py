@@ -70,7 +70,7 @@ def main():
     group_4.add_argument("--filter-large-community", help="only print messages containing one or more matching large communities (e.g., '11:22:33', '11:*:*', '*:22:33')", nargs="+", action="append", dest="filter_large_community")
 
     group_5 = parser.add_argument_group("line output commands")
-    group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma. Available fields are: " + LineBasedFormatter.available_fields(), dest="fields", default=LineBasedFormatter.FIELD_MESSAGE_TIMESTAMP + "," + LineBasedFormatter.FIELD_MESSAGE_TYPE + "," + LineBasedFormatter.FIELD_UPDATE_SUBTYPE + "," + LineBasedFormatter.FIELD_UPDATE_NLRI + "," + LineBasedFormatter.FIELD_UPDATE_WITHDRAWN_ROUTES)
+    group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma. Available fields are: " + LineBasedFormatter.available_fields(), dest="fields", default=LineBasedFormatter.FIELD_MESSAGE_TIMESTAMP[0] + "," + LineBasedFormatter.FIELD_MESSAGE_TYPE[0] + "," + LineBasedFormatter.FIELD_UPDATE_SUBTYPE[0] + "," + LineBasedFormatter.FIELD_UPDATE_NLRI[0] + "," + LineBasedFormatter.FIELD_UPDATE_WITHDRAWN_ROUTES[0])
 
     group_6 = parser.add_argument_group("other commands")
     group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
