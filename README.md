@@ -25,7 +25,7 @@ You may use `--help` argument to view all available options and arguments. The m
 
     cat /path/to/file.pcap | pbgpp -
     
-Sometime you may want to process many PCAPs at once. The parser is supporting wildcards when using the `--pcap` argument (Make sure you are using the quotes!).
+Sometimes you may want to process many PCAPs at once. The parser is supporting wildcards when using the `--pcap` argument (Make sure you are using the quotes!).
 
     pbgpp --pcap "/path/to/many/files/2017-02-01*.pcap" -f JSON
     
