@@ -80,7 +80,7 @@ class PBGPPHandler:
         logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
 
         if self.args.version:
-            print("pbgpp PCAP BGP Parser v0.2.9")
+            print("pbgpp PCAP BGP Parser v0.2.10")
             print("Copyright 2016-2017, DE-CIX Management GmbH")
             sys.exit(0)
 
