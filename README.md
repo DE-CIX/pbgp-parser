@@ -12,7 +12,7 @@ Wireshark is an awesome tool! Unfortunately, it only offers an graphical interfa
 ## Available inputs, formatters, and pipes
 The parser is able to read PCAP from: File and standard input (stdin) - soon it will be able to read live packages directly from network interface.
 
-The parser is able to format the parsed BGP messages into: a human-readable format that offers easy-to-read general information build for adhoc analysis of your network, JSON with full information scope, and a line based output. By using the line based output you may specify which fields you need to get displayed in a single line. Each field is separated using the TAB character (\t). Therefore, that kind of output is pretty easy to parse with other tools/scripts - you can easily integrate it into a toolchain.
+The parser is able to format the parsed BGP messages into: a human-readable format that offers easy-to-read general information build for adhoc analysis of your network, JSON with full information scope, and a line based output. By using the line based output you may specify which fields you need to get displayed in a single line. Each field is separated using the TAB character (\t). Therefore, that kind of output is pretty easy to parse with other tools/scripts - you can easily integrate it into a toolchain. When you are not specifying any output fields using `--fields` the parser will use the following output pattern per default in `-f LINE`-Mode: Timestamp, Message Type, Message Subtype, Announced Prefixes, Withdrawn Prefixes
 
 Potential output targets are: stdout, file, and streams to Apache Kafka.
 
