@@ -80,6 +80,8 @@ class LineBasedFormatter(BGPFormatter):
 
     def __init__(self, fields=None, separator="\t"):
         if not fields:
+            # If the user is not using --fields parameter fallback to default field set
+            # Default: timestamp, message_type, message_subtype, prefixes, withdrawn_routes
             self.fields = [self.FIELD_MESSAGE_TIMESTAMP, self.FIELD_MESSAGE_TYPE, self.FIELD_UPDATE_SUBTYPE, self.FIELD_UPDATE_NLRI, self.FIELD_UPDATE_WITHDRAWN_ROUTES]
         else:
             self.fields = fields
@@ -242,7 +244,6 @@ class LineBasedFormatter(BGPFormatter):
                                 else:
                                     r += self.separator
                                     break
-
                     else:
                         r += self.separator
                 else:
@@ -282,6 +283,9 @@ class LineBasedFormatter(BGPFormatter):
                                     break
                                 else:
                                     r += self.separator
+                            else:
+                                r+= self.separator
+                                break
                     else:
                         r += self.separator
                 else:
