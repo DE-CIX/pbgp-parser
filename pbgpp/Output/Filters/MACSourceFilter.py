@@ -43,3 +43,12 @@ class MACSourceFilter(BGPFilter):
         except Exception as e:
             # On error the filtering was not successful (due to wrong fields, etc.)
             return False
+
+    @staticmethod
+    def clear_input(values):
+        return_values = list()
+
+        for v in values:
+            return_values.append(v.replace(":", "").replace("-", "").lower())
+
+        return return_values

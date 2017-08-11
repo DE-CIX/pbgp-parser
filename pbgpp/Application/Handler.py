@@ -82,7 +82,7 @@ class PBGPPHandler:
         logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
 
         if self.args.version:
-            print("pbgpp PCAP BGP Parser v0.2.11")
+            print("pbgpp PCAP BGP Parser v0.2.12")
             print("Copyright 2016-2017, DE-CIX Management GmbH")
             sys.exit(0)
 
@@ -211,13 +211,13 @@ class PBGPPHandler:
         if self.args.filter_source_mac:
             values = self.args.filter_source_mac
             filters = list(chain(*values))
-            self.prefilters.append(MACSourceFilter(filters))
+            self.prefilters.append(MACSourceFilter(MACSourceFilter.clear_input(filters)))
             logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACSourceFilter")
 
         if self.args.filter_destination_mac:
             values = self.args.filter_destination_mac
             filters = list(chain(*values))
-            self.prefilters.append(MACDestinationFilter(filters))
+            self.prefilters.append(MACDestinationFilter(MACSourceFilter.clear_input(filters)))
             logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACDestinationFilter")
 
         if self.args.filter_timestamp:

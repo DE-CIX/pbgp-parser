@@ -64,9 +64,9 @@ def main():
     group_4.add_argument("--filter-community-as", help="only print messages containing the given community ASN (e.g., '12345')", nargs="+", action="append", dest="filter_community_as")
     group_4.add_argument("--filter-community-value", help="only print messages containing the given community value (e.g., '12345')", nargs="+", action="append", dest="filter_community_value")
     group_4.add_argument("--filter-source-ip", help="only print messages containing the given source IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_source_ip")
-    group_4.add_argument("--filter-source-mac", help="only print messages containing the given source MAC address (e.g., 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_source_mac")
+    group_4.add_argument("--filter-source-mac", help="only print messages containing the given source MAC address (e.g., 'aabbccddeeff')", nargs="+", action="append", dest="filter_source_mac")
     group_4.add_argument("--filter-destination-ip", help="only print messages containing the given destination IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_destination_ip")
-    group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aa:bb:cc:dd:ee:ff')", nargs="+", action="append", dest="filter_destination_mac")
+    group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aabbccddeeff')", nargs="+", action="append", dest="filter_destination_mac")
     group_4.add_argument("--filter-large-community", help="only print messages containing one or more matching large communities (e.g., '11:22:33', '11:*:*', '*:22:33')", nargs="+", action="append", dest="filter_large_community")
 
     group_5 = parser.add_argument_group("line output commands")
@@ -74,7 +74,6 @@ def main():
 
     group_6 = parser.add_argument_group("other commands")
     group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
-    group_6.add_argument("--progress", help="displays the current progress - only applicable when using pcap file as input source and writing to file or Kafka", action="store_true", dest="progress")
 
     main_handler = PBGPPHandler(parser)
 

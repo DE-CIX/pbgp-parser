@@ -31,8 +31,8 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_MESSAGE_TIMESTAMP = ["timestamp"]
     FIELD_MESSAGE_IP_SOURCE = ["source_ip", "src_ip"]
     FIELD_MESSAGE_IP_DESTINATION = ["destination_ip", "dst_ip"]
-    FIELD_MESSAGE_MAC_SOURCE = ["source_mac", "src_mac"]
-    FIELD_MESSAGE_MAC_DESTINATION = ["destination_mac", "dst_mac"]
+    FIELD_MESSAGE_MAC_SOURCE = ["source_mac", "src_mac", "mac_src", "mac_source"]
+    FIELD_MESSAGE_MAC_DESTINATION = ["destination_mac", "dst_mac", "mac_dst", "mac_destination"]
     FIELD_MESSAGE_LENGTH = ["length"]
     FIELD_MESSAGE_TYPE = ["type"]
 
