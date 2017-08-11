@@ -66,7 +66,6 @@ class PBGPPHandler:
         self.verbose = False
 
         self.fields = None
-        self.progress = False
 
         self.kafka_server = None
         self.kafka_topic = None
@@ -92,9 +91,6 @@ class PBGPPHandler:
 
         if self.args.verbose:
             logging.getLogger().setLevel(logging.DEBUG)
-
-        if self.progress:
-            self.progress = True
 
         logger.debug("Parsing filters ...")
         self.__parse_filters()
