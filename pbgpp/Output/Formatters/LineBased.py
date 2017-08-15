@@ -261,31 +261,32 @@ class LineBasedFormatter(BGPFormatter):
                         r += self.separator
                 else:
                     r += self.separator
+
             elif f in self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f == self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
                 # We can only display this information if we are handling an UPDATE message
                 if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
                     if len(message.path_attributes) > 0:
+
+                        communities = None
                         for attribute in message.path_attributes:
-                            # We found the correct path attribute
-                            communities = None
                             if isinstance(attribute, PathAttributeCommunities):
                                 communities = attribute.communities
                             elif isinstance(attribute, PathAttributeLargeCommunities):
                                 communities = attribute.large_communities
 
-                            if communities:
-                                if len(communities) > 0:
-                                    add = ""
-                                    for community in communities:
-                                        add += ";" + str(community)
+                        if communities:
+                            if len(communities) > 0:
+                                add = ""
+                                for community in communities:
+                                    add += ";" + str(community)
 
-                                    r += self.separator + add[1:]
-                                    break
-                                else:
-                                    r += self.separator
-                            else:
-                                r+= self.separator
+                                r += self.separator + add[1:]
                                 break
+                            else:
+                                r += self.separator
+                        else:
+                            r += self.separator
+                            break
                     else:
                         r += self.separator
                 else:
