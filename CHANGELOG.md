@@ -19,3 +19,9 @@
 **Version 0.2.9** - Adding SLL-packet support (Linux cooked-packet), Fixing copyright notice
 
 **Version 0.2.10** - Adding support for wildcards for pcap file argument, adding field aliases, minor bug fix
+
+**Version 0.2.11** - Fixing bug that causes trouble with missing tabs in line-based output
+
+**Version 0.2.12** - Removing functionless progress-flag; the function itself were already removed before first GitHub release 
+
+**Version 0.2.13** - Fixing bug within community filter
