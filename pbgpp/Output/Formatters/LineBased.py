@@ -264,7 +264,7 @@ class LineBasedFormatter(BGPFormatter):
 
             elif f in self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f == self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
                 # We can only display this information if we are handling an UPDATE message
-                if message.type == BGPStatics.MESSAGE_TYPE_UPDATE:
+                if message.type == BGPStatics.MESSAGE_TYPE_UPDATE and message.subtype == BGPStatics.UPDATE_TYPE_ANNOUNCE:
                     if len(message.path_attributes) > 0:
 
                         communities = None
