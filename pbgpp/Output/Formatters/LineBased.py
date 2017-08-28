@@ -126,7 +126,7 @@ class LineBasedFormatter(BGPFormatter):
             subtype = getattr(message, "subtype", False)
             if subtype:
                 return BGPTranslation.update_subtype(subtype)
-            return ""
+            return None
 
         # Withdrawn routes
         if f in self.FIELD_UPDATE_WITHDRAWN_ROUTES:
