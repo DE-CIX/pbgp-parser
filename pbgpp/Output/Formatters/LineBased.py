@@ -178,6 +178,7 @@ class LineBasedFormatter(BGPFormatter):
             else:
                 for j in i:
                     r += str(j) + " "
+		r += self.separator
         return r
 
         # # Convert to a nice output string
