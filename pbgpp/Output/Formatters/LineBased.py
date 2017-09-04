@@ -174,12 +174,11 @@ class LineBasedFormatter(BGPFormatter):
         r = ""
         for i in values:
             if not isinstance(i, list):
-                r += str(i) + self.separator
+                r += str(i)
             else:
-                for j in i:
-                    r += str(j) + " "
-		r += self.separator
-        return r
+                r += " ".join(map(str, i))
+	    r += self.separator
+        return r[:-1]
 
         # # Convert to a nice output string
         # r = ""
