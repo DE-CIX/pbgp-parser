@@ -25,3 +25,9 @@
 **Version 0.2.12** - Removing functionless progress-flag; the function itself were already removed before first GitHub release 
 
 **Version 0.2.13** - Fixing bug within community filter
+
+**Version 0.2.14** - Fixed output problems with the old LineBased Formatter
+
+**Version 0.2.15** - Tagged version with the old LineBased Formatter + several bug fixes for it
+
+**Version 0.2.16** - Adding a new LineBased Formatter (improved code style, slightly different output so watch out it does not break the compatibility to your own scripts)
