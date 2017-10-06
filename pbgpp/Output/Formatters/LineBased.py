@@ -79,7 +79,7 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_OPEN_VERSION,
                          FIELD_OPEN_BGP_IDENTIFIER]
 
-    def __init__(self, fields=None, separator="\t"):
+    def __init__(self, fields=None, separator='\t'):
         if not fields:
             # If the user is not using --fields parameter fallback to default field set
             # Default: timestamp, message_type, message_subtype, prefixes, withdrawn_routes
@@ -108,7 +108,6 @@ class LineBasedFormatter(BGPFormatter):
         return False
 
     def get_field_value(self, f, message):
-
         # Timestamp
         if f in self.FIELD_MESSAGE_TIMESTAMP:
             return str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1])
@@ -116,6 +115,64 @@ class LineBasedFormatter(BGPFormatter):
         # Source IP
         if f in self.FIELD_MESSAGE_IP_SOURCE:
             return message.pcap_information.get_ip().get_source_string()
+
+        # Destination IP
+        if f in self.FIELD_MESSAGE_IP_DESTINATION:
+            return message.pcap_information.get_ip().get_destination_string()
+
+        # Source MAC
+        if f in self.FIELD_MESSAGE_MAC_SOURCE:
+            return message.pcap_information.get_mac().get_source_string()
+
+        # Destination MAC
+        if f in self.FIELD_MESSAGE_MAC_DESTINATION:
+            return message.pcap_information.get_mac().get_destination_string()
+
+        # ASN
+        if f in self.FIELD_OPEN_MYASN:
+            asn = getattr(message, "asn", False)
+            if asn:
+                return str(asn)
+            return None
+
+        # Hold time
+        if f in self.FIELD_OPEN_HOLD_TIME:
+            hold_time = getattr(message, "hold_time", False)
+            if hold_time:
+                return str(hold_time)
+            return None
+
+        # BGP Version
+        if f in self.FIELD_OPEN_VERSION:
+            version = getattr(message, "version", False)
+            if version:
+                return str(version)
+            return None
+
+        # BGP Identifier
+        if f in self.FIELD_OPEN_BGP_IDENTIFIER:
+            bgp_identifier = getattr(message, "identifier", False)
+            if bgp_identifier:
+                return str(bgp_identifier)
+            return None
+
+        # Message length
+        if f in self.FIELD_MESSAGE_LENGTH:
+            return str(message.length)
+
+        # Path attributes length
+        if f in self.FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH:
+            path_attributes_length = getattr(message, "path_attributes_length", False)
+            if path_attributes_length:
+                return str(path_attributes_length)
+            return None
+
+        # Withdrawn routes length
+        if f in self.FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH:
+            withdrawn_routes_length = getattr(message, "withdrawn_routes_length", False)
+            if withdrawn_routes_length:
+                return str(withdrawn_routes_length)
+            return None
 
         # Message type
         if f in self.FIELD_MESSAGE_TYPE:
@@ -142,6 +199,20 @@ class LineBasedFormatter(BGPFormatter):
                 return [str(r) for r in prefixes]
             return None
 
+        # NLRI length
+        if f in self.FIELD_UPDATE_NLRI_LENGTH:
+            prefixes = getattr(message, "nlri", False)
+            if prefixes:
+                return [r.prefix_length_string for r in prefixes]
+            return None
+
+        # Attribute: Origin
+        if f in self.FIELD_UPDATE_ATTRIBUTE_ORIGIN:
+            path_attributes = getattr(message, "path_attributes", False)
+            if path_attributes:
+                return [str(a) for a in path_attributes if isinstance(a, PathAttributeOrigin)]
+            return None
+
         # Next hop
         if f in self.FIELD_UPDATE_ATTRIBUTE_NEXT_HOP:
             path_attributes = getattr(message, "path_attributes", False)
@@ -150,7 +221,7 @@ class LineBasedFormatter(BGPFormatter):
             return None
 
         # Communities
-        if f in self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES:
+        if f in self.FIELD_UPDATE_ATTRIBUTE_COMMUNITIES or f in self.FIELD_UPDATE_ATTRIBUTE_LARGE_COMMUNITIES:
             path_attributes = getattr(message, "path_attributes", False)
             if path_attributes:  # The split is necessary because communities are not returned as a list?
                 communities = [str(pa).split(" ") for pa in path_attributes if isinstance(pa, PathAttributeCommunities)]
@@ -177,7 +248,7 @@ class LineBasedFormatter(BGPFormatter):
                 r += str(i)
             else:
                 r += " ".join(map(str, i))
-	    r += self.separator
+            r += self.separator
         return r[:-1]
 
         # # Convert to a nice output string
