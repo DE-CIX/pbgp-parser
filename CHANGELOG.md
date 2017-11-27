@@ -31,3 +31,5 @@
 **Version 0.2.15** - Tagged version with the old LineBased Formatter + several bug fixes for it
 
 **Version 0.2.16** - Adding a new LineBased Formatter (improved code style, slightly different output so watch out it does not break the compatibility to your own scripts)
+
+**Version 0.2.17** - Improving HumanReadable Formatter

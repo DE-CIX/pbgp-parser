@@ -81,7 +81,7 @@ class HumanReadableFormatter(BGPFormatter):
                         # Process capabilities
                         for capability in parameter.capability_list:
                             if capability.type is not BGPStatics.CAPABILITY_UNKNOWN:
-                                string += self.prefix(2) + BGPTranslation.capability(capability.type) + "\n"
+                                string += self.prefix(2) + BGPTranslation.capability(capability.type) + " (" + str(capability.type) + ")\n"
                             else:
                                 string += self.prefix(2) + str(capability) + "\n"
 
@@ -150,7 +150,7 @@ class HumanReadableFormatter(BGPFormatter):
     @staticmethod
     def prefix(depth=0):
         if depth < -1:
-            raise OutputFormatterError("depth must be at least equal to 1.")
+            raise OutputFormatterError("depth must be bigger than -2.")
 
         if depth == -1:
             return "|"

@@ -131,6 +131,8 @@ class BGPTranslation:
                 return "Long-lived graceful restart (LLGR) capability"
             elif value == BGPStatics.CAPABILITY_FQDN:
                 return "FQDN capability"
+            elif value == BGPStatics.CAPABILITY_ALTERNATIVE_ROUTE_REFRESH:
+                return "Route refresh capability (Cisco-legacy)"
             else:
                 return "Unknown"
         except Exception as e:

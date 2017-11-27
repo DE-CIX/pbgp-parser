@@ -23,9 +23,14 @@ from pbgpp.BGP.Translation import BGPTranslation
 
 
 class CapabilityRouteRefresh(BGPCapability):
-    def __init__(self, payload):
+    def __init__(self, payload, legacy=False):
         BGPCapability.__init__(self, payload)
-        self.type = BGPStatics.CAPABILITY_ROUTE_REFRESH
+
+        if legacy:
+            self.type = BGPStatics.CAPABILITY_ALTERNATIVE_ROUTE_REFRESH
+        else:
+            self.type = BGPStatics.CAPABILITY_ROUTE_REFRESH
+
         self.__parse()
 
     def __parse(self):

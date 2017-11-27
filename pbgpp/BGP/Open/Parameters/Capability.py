@@ -89,9 +89,13 @@ class BGPCapability:
             from pbgpp.BGP.Open.Parameters.Capabilities.MultiprotocolExtensions import CapabilityMultiprotocolExtensions
             return CapabilityMultiprotocolExtensions(payload)
 
-        if capability_type == BGPStatics.CAPABILITY_ROUTE_REFRESH or capability_type == BGPStatics.CAPABILITY_ALTERNATIVE_ROUTE_REFRESH:
+        if capability_type == BGPStatics.CAPABILITY_ROUTE_REFRESH:
             from pbgpp.BGP.Open.Parameters.Capabilities.RouteRefresh import CapabilityRouteRefresh
             return CapabilityRouteRefresh(payload)
+
+        if capability_type == BGPStatics.CAPABILITY_ALTERNATIVE_ROUTE_REFRESH:
+            from pbgpp.BGP.Open.Parameters.Capabilities.RouteRefresh import CapabilityRouteRefresh
+            return CapabilityRouteRefresh(payload, legacy=True)
 
         if capability_type == BGPStatics.CAPABILITY_OUTBOUND_ROUTE_FILTERING:
             from pbgpp.BGP.Open.Parameters.Capabilities.OutboundRouteFiltering import CapabilityOutboundRouteFilter
