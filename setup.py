@@ -5,7 +5,7 @@ packages.append('pbgpp')
 
 setup(
     name='pbgpp',
-    version='0.2.17',
+    version='0.2.18',
     description='PCAP BGP Parser',
     author='DE-CIX Management GmbH',
     author_email='rnd@de-cix.net',
