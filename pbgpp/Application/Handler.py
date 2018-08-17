@@ -28,6 +28,7 @@ import pcapy
 from pbgpp.BGP.Exceptions import BGPPacketHasNoMessagesError, BGPError
 from pbgpp.BGP.Packet import BGPPacket
 from pbgpp.Output.Filters.ASNFilter import ASNFilter
+from pbgpp.Output.Filters.BlackholeFilter import BlackholeFilter
 from pbgpp.Output.Filters.CommunityASNFilter import CommunityASNFilter
 from pbgpp.Output.Filters.CommunityValueFilter import CommunityValueFilter
 from pbgpp.Output.Filters.LargeCommunityFilter import LargeCommunityFilter
@@ -82,7 +83,7 @@ class PBGPPHandler:
 
         if self.args.version:
             print("pbgpp PCAP BGP Parser v0.2.18")
-            print("Copyright 2016-2017, DE-CIX Management GmbH")
+            print("Copyright 2016-2018, DE-CIX Management GmbH")
             sys.exit(0)
 
         if self.args.quiet:
@@ -191,6 +192,12 @@ class PBGPPHandler:
             filters = list(chain(*values))
             self.filters.append(MessageSizeFilter(filters))
             logger.debug("Added " + str(len(filters)) + " filter(s) of MessageSizeFilter")
+
+        if self.args.filter_blackhole:
+            values = self.args.filter_blackhole
+            filters = list(chain(*values))
+            self.filters.append(BlackholeFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter of BlackholeFilter")
 
         if self.args.filter_source_ip:
             values = self.args.filter_source_ip

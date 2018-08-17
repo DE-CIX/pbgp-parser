@@ -68,6 +68,7 @@ def main():
     group_4.add_argument("--filter-destination-ip", help="only print messages containing the given destination IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_destination_ip")
     group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aabbccddeeff')", nargs="+", action="append", dest="filter_destination_mac")
     group_4.add_argument("--filter-large-community", help="only print messages containing one or more matching large communities (e.g., '11:22:33', '11:*:*', '*:22:33')", nargs="+", action="append", dest="filter_large_community")
+    group_4.add_argument("--filter-blackhole", help="only print messages that contain blackhole prefixes with given next_hop (e.g. 80.81.193.66) OR RFC7999 well-known BGP community value", nargs="+", action="append", dest="filter_blackhole")
 
     group_5 = parser.add_argument_group("line output commands")
     group_5.add_argument("--fields", help="specify the output-fields to be display in the order desired; separated by comma. Available fields are: " + LineBasedFormatter.available_fields(), dest="fields", default=LineBasedFormatter.FIELD_MESSAGE_TIMESTAMP[0] + "," + LineBasedFormatter.FIELD_MESSAGE_TYPE[0] + "," + LineBasedFormatter.FIELD_UPDATE_SUBTYPE[0] + "," + LineBasedFormatter.FIELD_UPDATE_NLRI[0] + "," + LineBasedFormatter.FIELD_UPDATE_WITHDRAWN_ROUTES[0])
