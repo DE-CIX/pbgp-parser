@@ -13,7 +13,7 @@
 **Version 0.2.6** - Adding JSON formatter for OPEN messages
 
 **Version 0.2.7** - Adding OPEN message fields for line based output (ASN, Hold Time, Version, BGP Identifier)
- 
+
 **Version 0.2.8** - Adding prefix length field for line based output
 
 **Version 0.2.9** - Adding SLL-packet support (Linux cooked-packet), Fixing copyright notice
@@ -22,7 +22,7 @@
 
 **Version 0.2.11** - Fixing bug that causes trouble with missing tabs in line-based output
 
-**Version 0.2.12** - Removing functionless progress-flag; the function itself were already removed before first GitHub release 
+**Version 0.2.12** - Removing functionless progress-flag; the function itself were already removed before first GitHub release
 
 **Version 0.2.13** - Fixing bug within community filter
 
@@ -35,3 +35,5 @@
 **Version 0.2.17** - Improving HumanReadable Formatter
 
 **Version 0.2.18** - Fixing NEXT_HOP attribute output on JSON formatter
+
+**Version 0.2.19** - Add BlackholeFilter to filter blackhole routes based on NEXT_HOP or RFC 7999 community.
