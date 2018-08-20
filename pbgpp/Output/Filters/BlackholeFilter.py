@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+from pbgpp.BGP.Update.Route import BGPRoute
 from pbgpp.Output.Filter import BGPFilter
 from pbgpp.BGP.Statics import BGPStatics
 
