@@ -82,6 +82,11 @@ class BGPPacket:
         messages = re.split(b'(?:\xff){16}', self.payload)
         messages = list(filter(None, messages))  # Fastest solution for filtering
 
+        # Check if the payload starts with the magic marker. If not we have to trash that bytes as it's
+        # a result of a missing TCP stream reassembly
+        if not self.payload[0:16] == b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff':
+            messages.pop(0)
+
         # Check for empty list (in this case we have a malformed/non-BGP packet)
         if len(messages) == 0:
             raise BGPPacketHasNoMessagesError("parsed packet didn't contain any BGP messages")
