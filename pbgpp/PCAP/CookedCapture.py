@@ -75,7 +75,7 @@ class PCAPCookedCapture:
             self.type = struct.unpack("!H", self.payload[14:16])[0]
 
         except Exception as e:
-            logging.error("Parsing SLL frame caused exception (message: " + e.message + ")")
+            logging.error("Parsing SLL frame caused exception (message: " + str(e) + ")")
             self.parsing_error = True
 
     def get_type(self):
