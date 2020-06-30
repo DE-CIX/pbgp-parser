@@ -49,10 +49,6 @@ class BGPUpdateMessage(BGPMessage):
         self.parsed = True
 
         try:
-            # Check last two bytes of byte payload - if they are set to zero we don't have any path attributes
-            if struct.unpack("!H", self.payload[-2:])[0] == 0:
-                self.path_attributes_length = 0
-
             # Unpack the length of withdrawn routes field and add 2 bytes to the current byte marker position
             self.withdrawn_routes_length = struct.unpack("!H", self.payload[:2])[0]
             current_byte_position = 2
