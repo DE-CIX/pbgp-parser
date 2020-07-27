@@ -39,3 +39,5 @@
 **Version 0.2.19** - Add BlackholeFilter to filter blackhole routes based on NEXT_HOP or RFC 7999 community
 
 **Version 0.2.20** - Fixing bug output of large communities when using the LineBased formatter
+
+**Version 0.2.20** - Add-Path capability added (RFC7911)
