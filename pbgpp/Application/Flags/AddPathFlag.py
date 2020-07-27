@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-from pbgpp.Application.Flags.Exceptions import FlagHandlerError, FlagError
+from pbgpp.Application.Flags.Exceptions import FlagError
 from pbgpp.Application.Flags.Flag import Flag
 
 
