@@ -104,7 +104,11 @@ class JSONFormatter(BGPFormatter):
             # Assign to message data
             message_data["path_attributes"] = path_attributes
             message_data["withdrawn_routes"] = withdrawn_routes
-            message_data["nlri"] = nlri
+            if message.add_path:
+                message_data["pathId"] = message.path_id
+            else:
+                message_data["pathId"] = "None"
+            message_data["nlri"] = nlri 
 
             # Assign message data to return data
             data["message_data"] = message_data

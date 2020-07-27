@@ -76,6 +76,9 @@ def main():
     group_6 = parser.add_argument_group("other commands")
     group_6.add_argument("--version", help="displays the current version of this software", action="store_true", dest="version")
 
+    group_7 = parser.add_argument_group("interpreter options")
+    group_7.add_argument("--add-path-metric", help="decide how to interpret UPDATE messages (0 = no add_path messages, 1 = only add_path messages, 2 = use implemented metric(!)", nargs=1, type=int, dest="add_path_metric")
+
     main_handler = PBGPPHandler(parser)
 
     try:

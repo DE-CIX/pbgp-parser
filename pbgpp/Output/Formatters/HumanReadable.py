@@ -104,7 +104,10 @@ class HumanReadableFormatter(BGPFormatter):
 
             # --- NLRI
             if len(message.nlri) > 0:
-                string += self.prefix(0) + "Prefix (NLRI):" + "\n"
+                string += self.prefix(0) + "Prefix (NLRI):"
+                if message.add_path:
+                    string += " (AddPath)\n" + self.prefix(0) + "Path Identifier: " + str(message.path_id)
+                string += "\n"
 
                 # Process NLRI
                 for route in message.nlri:
