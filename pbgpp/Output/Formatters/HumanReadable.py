@@ -132,7 +132,10 @@ class HumanReadableFormatter(BGPFormatter):
 
             # --- Withdrawn Routes
             if message.withdrawn_routes_length > 0:
-                string += self.prefix(0) + "Withdrawn Routes:" + "\n"
+                string += self.prefix(0) + "Withdrawn Routes:"
+                if message.add_path:
+                    string += " (AddPath)\n" + self.prefix(0) + "Path Identifier: " + str(message.path_id)
+                string += "\n"
 
                 # Process withdrawn routes
                 for route in message.withdrawn_routes:

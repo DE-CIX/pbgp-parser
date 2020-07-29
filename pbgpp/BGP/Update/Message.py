@@ -64,13 +64,36 @@ class BGPUpdateMessage(BGPMessage):
 
                 # Loop through withdrawals
                 while continue_loop:
+                    # AddPath assumption? look for description in the method for NLRI parsing
+                    if self.flags["addpath"].get_value() == 0: # No AddPath messages
+                        pass
+
+                    else:
+                        pathId_length_bytes = self.payload[current_byte_position:current_byte_position + 4]
+                        pathId = struct.unpack("!I", pathId_length_bytes)[0]
+
+                        if  self.flags["addpath"].get_value() == 1: # Only AddPath
+                            self.add_path = True
+                            self.path_id = pathId
+                            current_byte_position += 4
+                            
+                        else:                           # Try to find out (using metric)
+                            if pathId < 65536:
+                                self.add_path = True
+                                self.path_id = pathId
+                                current_byte_position += 4
+                            #else: drop the Path Id, its likely that this is not an AddPath msg
+                    
                     # First of all we need to parse the length of the withdrawn prefix. Depending on the prefix length
                     # we can determine the length following prefix itself
                     prefix_length_bytes = self.payload[current_byte_position:current_byte_position + 1]
                     prefix_length = struct.unpack("!B", prefix_length_bytes)[0]
                     current_byte_position += 1
 
-                    if 0 <= prefix_length <= 8:
+
+                    if prefix_length == 0:
+                        prefix_bytes = prefix_length_bytes
+                    elif 0 < prefix_length <= 8:
                         # Length of prefix field: 1 Byte
                         prefix_bytes = self.payload[current_byte_position:current_byte_position + 1]
                         current_byte_position += 1
@@ -193,7 +216,7 @@ class BGPUpdateMessage(BGPMessage):
 
                     if prefix_length == 0: #0.0.0.0/0
                         prefix_bytes = prefix_length_bytes
-                    elif 0 < prefix_length <= 8:
+                    elif 0 <= prefix_length <= 8:
                         # Length of prefix field: 1 Byte
                         prefix_bytes = self.payload[current_byte_position:current_byte_position + 1]
                         current_byte_position += 1
