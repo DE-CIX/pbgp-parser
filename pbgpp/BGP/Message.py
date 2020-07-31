@@ -25,13 +25,14 @@ from pbgpp.BGP.Translation import BGPTranslation
 
 
 class BGPMessage:
-    def __init__(self, payload, length, pcap_information):
+    def __init__(self, payload, length, pcap_information, flags=None):
         self.payload = payload
         self.length = length
         self.type = None
         self.parsed = False
         self.error = None
         self.pcap_information = pcap_information
+        self.flags = flags
 
     def __str__(self):
         # Return the string identifier of the BGP message
@@ -100,7 +101,7 @@ class BGPMessage:
         return self.length
 
     @staticmethod
-    def factory(payload, pcap_information):
+    def factory(payload, pcap_information, flags=None):
         logger = logging.getLogger("pbgpp.BGPMessage.factory")
 
         # Implement factory pattern for easy message class creation
@@ -108,7 +109,7 @@ class BGPMessage:
         # The byte after message length is the message type
         try:
             bgp_header = struct.unpack("!HB", payload[:3])
-        except Exception as e:
+        except Exception:
             # This could happen on a malformed packet
             logger.debug("Unpacking first 3 bytes of BGP message (length and type) failed.")
             raise BGPMessageFactoryError("given payload has no valid message type.")
@@ -123,7 +124,7 @@ class BGPMessage:
 
         if message_type == BGPStatics.MESSAGE_TYPE_UPDATE:
             from pbgpp.BGP.Update.Message import BGPUpdateMessage
-            return BGPUpdateMessage(payload[3:], message_length, pcap_information)
+            return BGPUpdateMessage(payload[3:], message_length, pcap_information, flags)
 
         if message_type == BGPStatics.MESSAGE_TYPE_KEEPALIVE:
             from pbgpp.BGP.Keepalive.Message import BGPKeepaliveMessage

@@ -39,6 +39,7 @@ class LineBasedFormatter(BGPFormatter):
 
     FIELD_UPDATE_SUBTYPE = ["subtype"]
     FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH = ["path_attributes_length"]
+    FIELD_UPDATE_PATH_IDENTIFIER = ["path_id", "path_identifier"]
     FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH = ["withdrawn_routes_length"]
     FIELD_UPDATE_WITHDRAWN_ROUTES = ["withdrawn_routes", "withdrawn_route", "withdrawals"]
     FIELD_UPDATE_NLRI = ["prefixes", "prefix", "nlri"]
@@ -64,6 +65,7 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_MESSAGE_TYPE,
                          FIELD_UPDATE_SUBTYPE,
                          FIELD_UPDATE_PATH_ATTRIBUTES_LENGTH,
+                         FIELD_UPDATE_PATH_IDENTIFIER,
                          FIELD_UPDATE_WITHDRAWN_ROUTES_LENGTH,
                          FIELD_UPDATE_WITHDRAWN_ROUTES,
                          FIELD_UPDATE_NLRI,
@@ -190,6 +192,13 @@ class LineBasedFormatter(BGPFormatter):
             w_routes = getattr(message, "withdrawn_routes", False)
             if w_routes:
                 return [str(r) for r in w_routes]
+            return None
+
+        # Path Identifier
+        if f in self.FIELD_UPDATE_PATH_IDENTIFIER:
+            add_path = getattr(message, "add_path", False)
+            if add_path:
+                return [message.path_id]
             return None
 
         # NLRI (announced prefixes)

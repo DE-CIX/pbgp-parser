@@ -54,8 +54,22 @@ pbgpp is producing logging output while parsing your PCAP input. The default opt
 
     # This command will pipe parsing output to stdout and log output at DEBUG level to stderr
     cat /path/to/file.pcap | pbgpp.py -p STDOUT --verbose 2> /path/to/output.log
-    
+
 **Note**, if you are not using stream redirection in combination with verbose or normal logging level you won't be able to separate parsing output from logging output.
+
+## BGP Add-Path (RFC7911)
+IETF introduced with RFC7911 the so called Add-Path feature. As mentioned in this RFC, a packet analyzer can not distinguish between a standard network prefix and a PathIdentifier.
+Therefore we implemented the following feature. A user is now able to toggle a Flag which allows three different interpretation modes of the NLRI fields.
+
+    #Use the flag like this: `--add-path-metric [0|1|2]`
+    pbgpp.py  --pcap my.pcap --add-path-metric 2
+
+0 (default): Assume that there are **no** Add-Path messages 
+
+1: Assume that there are **only** Add-Path messages
+
+2: Use the implemented metric. 
+If the NLRI field contains two 0-Bytes (translated to two 0.0.0.0/0 prefixes which should not occur at all) the programm assumes that the first 4 bytes are a Path Identifier and treates this field as an Add-Path message.  
 
 ## Limitations
 Currently, the parser doesn't perform a reassembly on fragmented TCP packets. This may leads into parsing errors and application warnings when you are trying to parse large BGP packets with several messages.

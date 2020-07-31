@@ -25,6 +25,10 @@ from itertools import chain
 
 import pcapy
 
+from pbgpp.Application.Flags.Flag import Flag
+from pbgpp.Application.Flags.AddPathFlag import AddPathFlag
+from pbgpp.Application.Flags.Exceptions import FlagError
+
 from pbgpp.BGP.Exceptions import BGPPacketHasNoMessagesError, BGPError
 from pbgpp.BGP.Packet import BGPPacket
 from pbgpp.Output.Filters.ASNFilter import ASNFilter
@@ -78,6 +82,10 @@ class PBGPPHandler:
 
         self.__packet_counter = 0
 
+        self.flags = {
+            "addpath": AddPathFlag()
+        }
+
     def handle(self):
         logger = logging.getLogger('pbgpp.PBGPPHandler.handle')
 
@@ -92,6 +100,9 @@ class PBGPPHandler:
 
         if self.args.verbose:
             logging.getLogger().setLevel(logging.DEBUG)
+
+        logger.debug("Parsing flags ...")
+        self.__parse_flags()
 
         logger.debug("Parsing filters ...")
         self.__parse_filters()
@@ -123,6 +134,19 @@ class PBGPPHandler:
 
         self.__parser.print_help()
         sys.exit(0)
+
+    def __parse_flags(self):
+        logger = logging.getLogger("pbgpp.PBGPPHandler.__parse_flags")
+
+        if self.args.add_path_metric:
+            flag_value = self.args.add_path_metric[0]
+            try:
+                self.flags["addpath"].set_value(flag_value)
+            except FlagError as e:
+                logger.error(e.message + " - fallback to default")
+                flag_value = self.flags["addpath"].default_value
+
+            logger.debug("AddPath-Flag set with value: " + str(flag_value))
 
     def __parse_filters(self):
         logger = logging.getLogger("pbgpp.PBGPPHandler.__parse_filters")
@@ -319,7 +343,7 @@ class PBGPPHandler:
                 return
 
         try:
-            bgp = BGPPacket(tcp.get_tcp_payload(), pcap_information)
+            bgp = BGPPacket(tcp.get_tcp_payload(), pcap_information, self.flags)
 
             messages = bgp.message_list
 

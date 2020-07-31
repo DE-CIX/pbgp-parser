@@ -26,7 +26,7 @@ from pbgpp.PCAP.Information import PCAPInformation
 
 
 class BGPPacket:
-    def __init__(self, payload, pcap_information):
+    def __init__(self, payload, pcap_information, flags=None):
         # Assign payload and pcap information
         self.payload = payload
         self.pcap_information = pcap_information
@@ -34,6 +34,7 @@ class BGPPacket:
         self.message_list = []
         self.__parsed = False
         self.__iteration_position = 0
+        self.flags = flags
 
         # Typecheck pcap information
         if not isinstance(self.pcap_information, PCAPInformation):
@@ -97,7 +98,7 @@ class BGPPacket:
         for m in messages:
             try:
                 # ... and add them to the message list of packet object using a message factory pattern
-                self.add_message(BGPMessage.factory(m, self.pcap_information))
+                self.add_message(BGPMessage.factory(m, self.pcap_information, self.flags))
             except BGPMessageFactoryError as f:
                 # This exception can be raised when no valid message type could be found
                 # It's a common exception when there is a malformed packet - therefore: log it as INFO
