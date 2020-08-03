@@ -65,6 +65,8 @@ def main():
     group_4.add_argument("--filter-community-value", help="only print messages containing the given community value (e.g., '12345')", nargs="+", action="append", dest="filter_community_value")
     group_4.add_argument("--filter-source-ip", help="only print messages containing the given source IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_source_ip")
     group_4.add_argument("--filter-source-mac", help="only print messages containing the given source MAC address (e.g., 'aabbccddeeff')", nargs="+", action="append", dest="filter_source_mac")
+    group_4.add_argument("--filter-customer-vlan", help="only print messages containing the given (customer) VLAN ID (e.g., '42')", nargs="+", action="append", dest="filter_customer_vlan")
+    group_4.add_argument("--filter-service-vlan", help="only print messages containing the given service VLAN ID (e.g., '1337')", nargs="+", action="append", dest="filter_service_vlan")
     group_4.add_argument("--filter-destination-ip", help="only print messages containing the given destination IP address (e.g., '80.81.82.83')", nargs="+", action="append", dest="filter_destination_ip")
     group_4.add_argument("--filter-destination-mac", help="only print messages containing the given destination MAC address (e.g., 'aabbccddeeff')", nargs="+", action="append", dest="filter_destination_mac")
     group_4.add_argument("--filter-large-community", help="only print messages containing one or more matching large communities (e.g., '11:22:33', '11:*:*', '*:22:33')", nargs="+", action="append", dest="filter_large_community")

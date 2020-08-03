@@ -22,7 +22,8 @@ from pbgpp.PCAP.Information import PCAPLayer3Information
 
 
 class PCAPIP:
-    PROTO_TCP = 0x0006
+    # TODO IPV6?
+    PROTO_TCP = 0x0006                 # TODO: whats going on here?
     BITMASK_IP_HEADER_LENGTH = 0xf
 
     def __init__(self, payload):

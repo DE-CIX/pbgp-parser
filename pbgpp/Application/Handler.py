@@ -247,6 +247,18 @@ class PBGPPHandler:
             self.prefilters.append(MACDestinationFilter(MACSourceFilter.clear_input(filters)))
             logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACDestinationFilter")
 
+        if self.args.filter_customer_vlan:
+            values = self.args.filter_customer_vlan
+            filters = list(chain(*values))
+            self.prefilters.append(VLANCustomerFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of VLANCustomerFilter")
+
+        if self.args.filter_service_vlan:
+            values = self.args.filter_service_vlan
+            filters = list(chain(*values))
+            self.prefilters.append(VLANServiceFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " pre-filter(s) of VLANServiceFilter")
+
         if self.args.filter_timestamp:
             values = self.args.filter_timestamp
             filters = list(chain(*values))
@@ -318,8 +330,9 @@ class PBGPPHandler:
         eth = PCAPEthernet(payload)
 
         # Check for raw ethernet packet
-        if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4:
-
+        eth_type = eth.get_type()
+        if eth_type != PCAPEthernet.ETH_TYPE_IPV4 and eth_type != PCAPEthernet.ETH_TYPE_VLAN and eth_type != PCAPEthernet.ETH_TYPE_QINQ:
+            
             # Check for SLL-packet
             eth = PCAPCookedCapture(payload)
 
