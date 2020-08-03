@@ -64,32 +64,14 @@ class BGPUpdateMessage(BGPMessage):
 
                 # Loop through withdrawals
                 while continue_loop:
-                    # AddPath assumption? look for description in the method for NLRI parsing
-                    if self.flags["addpath"].get_value() == 0: # No AddPath messages
-                        pass
+                    # AddPath assumption? 
+                    current_byte_position = self.__addpath_routine(current_byte_position)
 
-                    else:
-                        pathId_length_bytes = self.payload[current_byte_position:current_byte_position + 4]
-                        pathId = struct.unpack("!I", pathId_length_bytes)[0]
-
-                        if  self.flags["addpath"].get_value() == 1: # Only AddPath
-                            self.add_path = True
-                            self.path_id = pathId
-                            current_byte_position += 4
-                            
-                        else:                           # Try to find out (using metric)
-                            if pathId < 65536:
-                                self.add_path = True
-                                self.path_id = pathId
-                                current_byte_position += 4
-                            #else: drop the Path Id, its likely that this is not an AddPath msg
-                    
                     # First of all we need to parse the length of the withdrawn prefix. Depending on the prefix length
                     # we can determine the length following prefix itself
                     prefix_length_bytes = self.payload[current_byte_position:current_byte_position + 1]
                     prefix_length = struct.unpack("!B", prefix_length_bytes)[0]
                     current_byte_position += 1
-
 
                     if prefix_length == 0:
                         prefix_bytes = prefix_length_bytes
@@ -179,34 +161,7 @@ class BGPUpdateMessage(BGPMessage):
                 current_byte_position = self.path_attributes_length + 4 + self.withdrawn_routes_length
 
                 while continue_loop:
-                    """
-                    The Following is a Fix for missing Add_Path feature.
-                    Due to the lack of a definition for this case, we need depend on the users decision.
-                    See RFC 7911 Chapter 6 p.5 (22.07.2020).
-
-                    In most cases, the pathId is lower than 2**16. Also it is uncommon,
-                    that one BGP UPDATE message contains the 0.0.0.0/0 prefix 2 times.
-                    This leads to the following metric if the user sets the add_path_flag to 2.
-                    """
-                    # AddPath assumption?
-                    if self.flags["addpath"].get_value() == 0: # No AddPath messages
-                        pass
-
-                    else:
-                        pathId_length_bytes = self.payload[current_byte_position:current_byte_position + 4]
-                        pathId = struct.unpack("!I", pathId_length_bytes)[0]
-
-                        if  self.flags["addpath"].get_value() == 1: # Only AddPath
-                            self.add_path = True
-                            self.path_id = pathId
-                            current_byte_position += 4
-                            
-                        else:                           # Try to find out (using metric)
-                            if pathId < 65536:
-                                self.add_path = True
-                                self.path_id = pathId
-                                current_byte_position += 4
-                            #else: drop the Path Id, its likely that this is not an AddPath msg
+                    current_byte_position = self.__addpath_routine(current_byte_position)
 
                     # First of all we have to check the prefix length as byte-length of the following
                     # prefix depends on its prefix length (This is a 1-byte-field)
@@ -259,3 +214,34 @@ class BGPUpdateMessage(BGPMessage):
             self.error = True
 
         self.error = False
+
+    def __addpath_routine(self, current_byte_position):
+        """
+        The Following is a Fix for missing Add_Path feature.
+        Due to the lack of a definition for this case, we need depend on the users decision.
+        See RFC 7911 Chapter 6 p.5 (22.07.2020).
+
+        In most cases, the pathId is lower than 2**16. Also it is uncommon,
+        that one BGP UPDATE message contains the 0.0.0.0/0 prefix 2 times.
+        This leads to the following metric if the user sets the add_path_flag to 2.
+        """
+        # AddPath assumption?
+        if self.flags["addpath"].get_value() == 0: # No AddPath messages
+            pass
+
+        else:
+            pathId_length_bytes = self.payload[current_byte_position:current_byte_position + 4]
+            pathId = struct.unpack("!I", pathId_length_bytes)[0]
+
+            if  self.flags["addpath"].get_value() == 1: # Only AddPath
+                self.add_path = True
+                self.path_id = pathId
+                current_byte_position += 4
+                
+            else:                           # Try to find out (using metric)
+                if pathId < 65536:
+                    self.add_path = True
+                    self.path_id = pathId
+                    current_byte_position += 4
+                #else: drop the Path Id, its likely that this is not an AddPath msg
+        return current_byte_position
