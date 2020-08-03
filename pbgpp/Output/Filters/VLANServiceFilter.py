@@ -32,10 +32,10 @@ class VLANServiceFilter(BGPFilter):
 
         try:
             for v in self.values:
-                if pcap_information.get_service_vlan() == v:
+                if str(pcap_information.get_service_vlan()) == v:
                     return True
 
-                if v[0:1] == "~" and pcap_information.get_service_vlan() != v[1:]:
+                if v[0:1] == "~" and str(pcap_information.get_service_vlan()) != v[1:]:
                     return True
 
             # Searched value was not found

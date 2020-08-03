@@ -47,6 +47,8 @@ from pbgpp.Output.Filters.MessageTypeFilter import MessageTypeFilter
 from pbgpp.Output.Filters.NLRIFilter import NLRIFilter
 from pbgpp.Output.Filters.NextHopFilter import NextHopFilter
 from pbgpp.Output.Filters.TimestampFilter import TimestampFilter
+from pbgpp.Output.Filters.VLANCustomerFilter import VLANCustomerFilter
+from pbgpp.Output.Filters.VLANServiceFilter import VLANServiceFilter
 from pbgpp.Output.Filters.WithdrawnFilter import WithdrawnFilter
 from pbgpp.Output.Formatters.HumanReadable import HumanReadableFormatter
 from pbgpp.Output.Formatters.JSON import JSONFormatter
