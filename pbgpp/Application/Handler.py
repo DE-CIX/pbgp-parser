@@ -244,7 +244,7 @@ class PBGPPHandler:
         if self.args.filter_destination_mac:
             values = self.args.filter_destination_mac
             filters = list(chain(*values))
-            self.prefilters.append(MACDestinationFilter(MACSourceFilter.clear_input(filters)))
+            self.prefilters.append(MACDestinationFilter(MACDestinationFilter.clear_input(filters)))
             logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACDestinationFilter")
 
         if self.args.filter_timestamp:
