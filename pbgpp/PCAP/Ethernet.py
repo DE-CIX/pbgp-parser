@@ -59,7 +59,7 @@ class PCAPEthernet:
                 self.payload_offset = 20
 
             # MAC addresses
-            self.mac = PCAPLayer2Information(self.payload[6:12], self.payload[:6], self.vlan_tags) #vlan?
+            self.mac = PCAPLayer2Information(self.payload[6:12], self.payload[:6], self.vlan_tags)
 
         except Exception as e:
             logging.error("Parsing ethernet frame caused exception (message: " + str(e) + ")")
