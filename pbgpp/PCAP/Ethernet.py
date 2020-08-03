@@ -29,6 +29,8 @@ class PCAPEthernet:
 
     ETH_TYPE_VLAN = 0x8100  # Vlan
     ETH_TYPE_QINQ = 0x88a8  # QinQ
+    
+    BITMASK_VLAN_ID_LENGTH = 0x0FFF
 
     def __init__(self, payload):
         self.payload = payload
@@ -54,8 +56,8 @@ class PCAPEthernet:
                 self.payload_offset = 16
                 
             if self.type == PCAPEthernet.ETH_TYPE_QINQ:
-                self.vlan_tags[0] = struct.unpack("!H", self.payload[18:20])[0] & 0x0FFF
-                self.vlan_tags[1] = struct.unpack("!H", self.payload[14:16])[0] & 0x0FFF
+                self.vlan_tags[0] = struct.unpack("!H", self.payload[18:20])[0] & BITMASK_VLAN_ID_LENGTH
+                self.vlan_tags[1] = struct.unpack("!H", self.payload[14:16])[0] & BITMASK_VLAN_ID_LENGTH
                 self.payload_offset = 20
 
             # MAC addresses
