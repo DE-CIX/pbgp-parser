@@ -46,6 +46,7 @@ from pbgpp.Output.Filters.MessageSubTypeFilter import MessageSubTypeFilter
 from pbgpp.Output.Filters.MessageTypeFilter import MessageTypeFilter
 from pbgpp.Output.Filters.NLRIFilter import NLRIFilter
 from pbgpp.Output.Filters.NextHopFilter import NextHopFilter
+from pbgpp.Output.Filters.PathIdentifierFilter import PathIdentifierFilter
 from pbgpp.Output.Filters.TimestampFilter import TimestampFilter
 from pbgpp.Output.Filters.WithdrawnFilter import WithdrawnFilter
 from pbgpp.Output.Formatters.HumanReadable import HumanReadableFormatter
@@ -162,6 +163,12 @@ class PBGPPHandler:
             filters = list(chain(*values))
             self.filters.append(MessageSubTypeFilter(filters))
             logger.debug("Added " + str(len(filters)) + " filter(s) of MessageSubTypeFilter")
+
+        if self.args.filter_pathid:
+            values = self.args.filter_pathid
+            filters = list(chain(*values))
+            self.filters.append(PathIdentifierFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of PathIdentfierFilter")
 
         if self.args.filter_nlri:
             values = self.args.filter_nlri
