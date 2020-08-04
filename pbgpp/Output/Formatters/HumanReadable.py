@@ -23,6 +23,8 @@ from pbgpp.BGP.Translation import BGPTranslation
 from pbgpp.BGP.Update.Route import BGPRoute
 from pbgpp.Output.Exceptions import OutputFormatterError
 from pbgpp.Output.Formatter import BGPFormatter
+from pbgpp.PCAP.Information import PCAPLayer3Information
+
 
 
 class HumanReadableFormatter(BGPFormatter):
@@ -51,7 +53,12 @@ class HumanReadableFormatter(BGPFormatter):
         # Initialize basic return string and PCAP information
         string = "[BGPMessage " + BGPTranslation.message_type(message.type) + "] - " + str(message.length) + " Bytes\n"
         string += self.prefix(0) + "MAC: " + message.pcap_information.get_mac().get_source_string(separated=True) + " -> " + message.pcap_information.get_mac().get_destination_string(separated=True) + "\n"
-        string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
+
+        if message.pcap_information.get_ip().version == PCAPLayer3Information.IP_VERSION_4:
+            string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
+        else:
+            string += self.prefix(0) + "IP: [" + message.pcap_information.get_ip().get_source_string() + "]:" + message.pcap_information.get_ports().get_source_string() + " -> [" + message.pcap_information.get_ip().get_destination_string() + "]:" + message.pcap_information.get_ports().get_destination_string() + "\n"
+        
         string += self.prefix(0) + "Timestamp: " + message.pcap_information.get_timestmap_utc() + " (" + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1]) + ")\n"
 
         # Display additional information

@@ -325,13 +325,13 @@ class PBGPPHandler:
         eth = PCAPEthernet(payload)
 
         # Check for raw ethernet packet
-        if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4:
+        if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4 and not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV6:
 
             # Check for SLL-packet
             eth = PCAPCookedCapture(payload)
 
-            if not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV4:
-                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 ethernet type.")
+            if not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV4 and not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV6:
+                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 or non-IPv6 ethernet type.")
                 return False
 
         ip = PCAPIP(eth.get_eth_payload())
@@ -342,7 +342,7 @@ class PBGPPHandler:
 
         tcp = PCAPTCP(ip.get_ip_payload())
 
-        pcap_information = PCAPInformation(header.getts(), eth.mac, ip.addresses, tcp.ports)
+        pcap_information = PCAPInformation(header.getts(), eth.get_mac(), ip.get_addresses(), tcp.get_ports())
 
         for filter in self.prefilters:
             if not filter.apply(pcap_information):
