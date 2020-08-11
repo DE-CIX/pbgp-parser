@@ -26,6 +26,7 @@ from pbgpp.PCAP.Information import PCAPLayer2Information
 
 class PCAPEthernet:
     ETH_TYPE_IPV4 = 0x0800
+    ETH_TYPE_IPV6 = 0x86DD
 
     def __init__(self, payload):
         self.payload = payload
