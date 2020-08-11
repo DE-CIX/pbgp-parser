@@ -124,8 +124,8 @@ class HumanReadableFormatter(BGPFormatter):
             if message.path_attributes_length > 0:
 
                 # Process path attributes
+                string += self.prefix(0) + "Path Attributes: \n"
                 for attribute in message.path_attributes:
-                    string += self.prefix(0) + "Path Attributes:" + "\n"
 
                     if attribute.type == BGPStatics.UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES:
                         # Extended Communities must be displayed in another way than other attributes
@@ -133,6 +133,21 @@ class HumanReadableFormatter(BGPFormatter):
 
                         for community in attribute.extended_communities:
                             string += self.prefix(2) + str(community) + "\n"
+
+                    elif attribute.type == BGPStatics.UPDATE_ATTRIBUTE_MP_REACH_NLRI:
+                        string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ":\n" + self.prefix(2) + "Next Hop:\n"
+                        for hop in attribute.next_hop:
+                            string += self.prefix(2) + str(hop) + "\n"
+
+                        string += self.prefix(2) + "\n" + self.prefix(2) + "NLRI:\n"
+                        for nlri in attribute.nlri:
+                            string += self.prefix(2) + str(nlri) + "\n"
+
+                    elif attribute.type == BGPStatics.UPDATE_ATTRIBUTE_MP_UNREACH_NLRI:
+                        string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ":\n"
+                        for nlri in attribute.nlri:
+                            string += self.prefix(2) + str(nlri) + "\n"
+                        
                     else:
                         # We got a "normal" path attribute
                         string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ": " + str(attribute) + "\n"
