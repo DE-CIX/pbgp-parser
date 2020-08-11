@@ -46,6 +46,7 @@ from pbgpp.Output.Filters.MessageSubTypeFilter import MessageSubTypeFilter
 from pbgpp.Output.Filters.MessageTypeFilter import MessageTypeFilter
 from pbgpp.Output.Filters.NLRIFilter import NLRIFilter
 from pbgpp.Output.Filters.NextHopFilter import NextHopFilter
+from pbgpp.Output.Filters.PathIdentifierFilter import PathIdentifierFilter
 from pbgpp.Output.Filters.TimestampFilter import TimestampFilter
 from pbgpp.Output.Filters.VLANCustomerFilter import VLANCustomerFilter
 from pbgpp.Output.Filters.VLANServiceFilter import VLANServiceFilter
@@ -165,6 +166,12 @@ class PBGPPHandler:
             self.filters.append(MessageSubTypeFilter(filters))
             logger.debug("Added " + str(len(filters)) + " filter(s) of MessageSubTypeFilter")
 
+        if self.args.filter_pathid:
+            values = self.args.filter_pathid
+            filters = list(chain(*values))
+            self.filters.append(PathIdentifierFilter(filters))
+            logger.debug("Added " + str(len(filters)) + " filter(s) of PathIdentfierFilter")
+
         if self.args.filter_nlri:
             values = self.args.filter_nlri
             filters = list(chain(*values))
@@ -246,7 +253,7 @@ class PBGPPHandler:
         if self.args.filter_destination_mac:
             values = self.args.filter_destination_mac
             filters = list(chain(*values))
-            self.prefilters.append(MACDestinationFilter(MACSourceFilter.clear_input(filters)))
+            self.prefilters.append(MACDestinationFilter(MACDestinationFilter.clear_input(filters)))
             logger.debug("Added " + str(len(filters)) + " pre-filter(s) of MACDestinationFilter")
 
         if self.args.filter_customer_vlan:
@@ -332,14 +339,13 @@ class PBGPPHandler:
         eth = PCAPEthernet(payload)
 
         # Check for raw ethernet packet
-        eth_type = eth.get_type()
-        if eth_type != PCAPEthernet.ETH_TYPE_IPV4 and eth_type != PCAPEthernet.ETH_TYPE_VLAN and eth_type != PCAPEthernet.ETH_TYPE_QINQ:
-            
+        if not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV4 and not eth.get_type() == PCAPEthernet.ETH_TYPE_IPV6 and not eth_type == PCAPEthernet.ETH_TYPE_VLAN and not eth_type == PCAPEthernet.ETH_TYPE_QINQ:
+
             # Check for SLL-packet
             eth = PCAPCookedCapture(payload)
 
-            if not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV4:
-                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 ethernet type.")
+            if not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV4 and not eth.get_type() == PCAPCookedCapture.ETH_TYPE_IPV6:
+                logger.debug("Discarding PCAP packet " + str(self.__packet_counter) + " due to non-IPv4 or non-IPv6 ethernet type.")
                 return False
 
         ip = PCAPIP(eth.get_eth_payload())
@@ -350,7 +356,7 @@ class PBGPPHandler:
 
         tcp = PCAPTCP(ip.get_ip_payload())
 
-        pcap_information = PCAPInformation(header.getts(), eth.mac, ip.addresses, tcp.ports)
+        pcap_information = PCAPInformation(header.getts(), eth.get_mac(), ip.get_addresses(), tcp.get_ports())
 
         for filter in self.prefilters:
             if not filter.apply(pcap_information):

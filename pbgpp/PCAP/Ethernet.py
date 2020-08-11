@@ -25,8 +25,10 @@ from pbgpp.PCAP.Information import PCAPLayer2Information
 
 
 class PCAPEthernet:
-    ETH_TYPE_IPV4 = 0x0800  # IPV4
-
+  
+    ETH_TYPE_IPV4 = 0x0800
+    ETH_TYPE_IPV6 = 0x86DD
+    
     ETH_TYPE_VLAN = 0x8100  # Vlan
     ETH_TYPE_QINQ = 0x88a8  # QinQ
     
