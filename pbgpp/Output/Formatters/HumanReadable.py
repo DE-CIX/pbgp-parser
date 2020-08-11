@@ -50,15 +50,22 @@ class HumanReadableFormatter(BGPFormatter):
         # |--- 203.190.42.0/24
         ##
 
+
         # Initialize basic return string and PCAP information
         string = "[BGPMessage " + BGPTranslation.message_type(message.type) + "] - " + str(message.length) + " Bytes\n"
         string += self.prefix(0) + "MAC: " + message.pcap_information.get_mac().get_source_string(separated=True) + " -> " + message.pcap_information.get_mac().get_destination_string(separated=True) + "\n"
 
+        # Show VLAN tags only if existent
+        if message.pcap_information.get_customer_vlan() != None:
+            string += self.prefix(0) + "VLAN (Customer): " + message.pcap_information.get_customer_vlan() + "\n"
+        if message.pcap_information.get_service_vlan() != None:
+            string += self.prefix(0) + "VLAN (Service): " + message.pcap_information.get_service_vlan() + "\n"
+            
         if message.pcap_information.get_ip().version == PCAPLayer3Information.IP_VERSION_4:
             string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
         else:
             string += self.prefix(0) + "IP: [" + message.pcap_information.get_ip().get_source_string() + "]:" + message.pcap_information.get_ports().get_source_string() + " -> [" + message.pcap_information.get_ip().get_destination_string() + "]:" + message.pcap_information.get_ports().get_destination_string() + "\n"
-        
+
         string += self.prefix(0) + "Timestamp: " + message.pcap_information.get_timestmap_utc() + " (" + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1]) + ")\n"
 
         # Display additional information

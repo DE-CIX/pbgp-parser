@@ -42,6 +42,8 @@ class JSONFormatter(BGPFormatter):
             "destination_mac": message.pcap_information.get_mac().get_destination_string(),
             "source_ip": message.pcap_information.get_ip().get_source_string(),
             "destination_ip": message.pcap_information.get_ip().get_destination_string(),
+            "customer_vlan": message.pcap_information.get_customer_vlan(),
+            "service_vlan": message.pcap_information.get_service_vlan(),
 
             "message_data": None
         }

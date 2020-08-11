@@ -22,7 +22,7 @@ from pbgpp.PCAP.Information import PCAPLayer3Information
 
 
 class PCAPIP:
-    PROTO_TCP = 0x0006
+    PROTO_TCP = 0x0006 
     BITMASK_IP_HEADER_LENGTH = 0xF
 
     IP6_STATIC_HEADER_LENGTH = 40

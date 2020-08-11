@@ -35,6 +35,8 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_MESSAGE_IP_DESTINATION = ["destination_ip", "dst_ip"]
     FIELD_MESSAGE_MAC_SOURCE = ["source_mac", "src_mac", "mac_src", "mac_source"]
     FIELD_MESSAGE_MAC_DESTINATION = ["destination_mac", "dst_mac", "mac_dst", "mac_destination"]
+    FIELD_MESSAGE_VLAN_CUSTOMER = ["vlan_customer", "vlan_id_customer", "customer_vlan", "customer_vlan_id"]
+    FIELD_MESSAGE_VLAN_SERVICE = ["vlan_service", "vlan_id_service", "service_vlan", "service_vlan_id"]
     FIELD_MESSAGE_LENGTH = ["length"]
     FIELD_MESSAGE_TYPE = ["type"]
 
@@ -65,6 +67,8 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_MESSAGE_IP_DESTINATION,
                          FIELD_MESSAGE_MAC_SOURCE,
                          FIELD_MESSAGE_MAC_DESTINATION,
+                         FIELD_MESSAGE_VLAN_CUSTOMER,
+                         FIELD_MESSAGE_VLAN_SERVICE,
                          FIELD_MESSAGE_LENGTH,
                          FIELD_MESSAGE_TYPE,
                          FIELD_UPDATE_SUBTYPE,
@@ -136,6 +140,14 @@ class LineBasedFormatter(BGPFormatter):
         # Destination MAC
         if f in self.FIELD_MESSAGE_MAC_DESTINATION:
             return message.pcap_information.get_mac().get_destination_string()
+
+        # Customer VLAN
+        if f in self.FIELD_MESSAGE_VLAN_CUSTOMER:
+            return message.pcap_information.get_customer_vlan()
+
+        # Customer VLAN
+        if f in self.FIELD_MESSAGE_VLAN_SERVICE:
+            return message.pcap_information.get_service_vlan()
 
         # ASN
         if f in self.FIELD_OPEN_MYASN:
