@@ -29,7 +29,6 @@ import struct
 import socket
 import math
 
-#TODO
 class PathAttributeMPReachNLRI(BGPPathAttribute):
     """
     RFC 4760

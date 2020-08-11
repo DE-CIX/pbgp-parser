@@ -29,8 +29,6 @@ from pbgpp.BGP.Update.PathAttributes.MPUnReachNLRI import PathAttributeMPUnReach
 from pbgpp.Output.Formatter import BGPFormatter
 from itertools import chain
 
-#TODO list UNREACHABLE und REACHABLE fields
-
 class LineBasedFormatter(BGPFormatter):
     FIELD_MESSAGE_TIMESTAMP = ["timestamp"]
     FIELD_MESSAGE_IP_SOURCE = ["source_ip", "src_ip"]
