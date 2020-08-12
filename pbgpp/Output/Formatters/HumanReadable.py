@@ -23,6 +23,8 @@ from pbgpp.BGP.Translation import BGPTranslation
 from pbgpp.BGP.Update.Route import BGPRoute
 from pbgpp.Output.Exceptions import OutputFormatterError
 from pbgpp.Output.Formatter import BGPFormatter
+from pbgpp.PCAP.Information import PCAPLayer3Information
+
 
 
 class HumanReadableFormatter(BGPFormatter):
@@ -48,10 +50,22 @@ class HumanReadableFormatter(BGPFormatter):
         # |--- 203.190.42.0/24
         ##
 
+
         # Initialize basic return string and PCAP information
         string = "[BGPMessage " + BGPTranslation.message_type(message.type) + "] - " + str(message.length) + " Bytes\n"
         string += self.prefix(0) + "MAC: " + message.pcap_information.get_mac().get_source_string(separated=True) + " -> " + message.pcap_information.get_mac().get_destination_string(separated=True) + "\n"
-        string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
+
+        # Show VLAN tags only if existent
+        if message.pcap_information.get_customer_vlan() != None:
+            string += self.prefix(0) + "VLAN (Customer): " + message.pcap_information.get_customer_vlan() + "\n"
+        if message.pcap_information.get_service_vlan() != None:
+            string += self.prefix(0) + "VLAN (Service): " + message.pcap_information.get_service_vlan() + "\n"
+            
+        if message.pcap_information.get_ip().version == PCAPLayer3Information.IP_VERSION_4:
+            string += self.prefix(0) + "IP: " + message.pcap_information.get_ip().get_source_string() + ":" + message.pcap_information.get_ports().get_source_string() + " -> " + message.pcap_information.get_ip().get_destination_string() + ":" + message.pcap_information.get_ports().get_destination_string() + "\n"
+        else:
+            string += self.prefix(0) + "IP: [" + message.pcap_information.get_ip().get_source_string() + "]:" + message.pcap_information.get_ports().get_source_string() + " -> [" + message.pcap_information.get_ip().get_destination_string() + "]:" + message.pcap_information.get_ports().get_destination_string() + "\n"
+
         string += self.prefix(0) + "Timestamp: " + message.pcap_information.get_timestmap_utc() + " (" + str(message.pcap_information.get_timestamp()[0]) + "." + str(message.pcap_information.get_timestamp()[1]) + ")\n"
 
         # Display additional information
@@ -117,8 +131,8 @@ class HumanReadableFormatter(BGPFormatter):
             if message.path_attributes_length > 0:
 
                 # Process path attributes
+                string += self.prefix(0) + "Path Attributes: \n"
                 for attribute in message.path_attributes:
-                    string += self.prefix(0) + "Path Attributes:" + "\n"
 
                     if attribute.type == BGPStatics.UPDATE_ATTRIBUTE_EXTENDED_COMMUNITIES:
                         # Extended Communities must be displayed in another way than other attributes
@@ -126,6 +140,21 @@ class HumanReadableFormatter(BGPFormatter):
 
                         for community in attribute.extended_communities:
                             string += self.prefix(2) + str(community) + "\n"
+
+                    elif attribute.type == BGPStatics.UPDATE_ATTRIBUTE_MP_REACH_NLRI:
+                        string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ":\n" + self.prefix(2) + "Next Hop:\n"
+                        for hop in attribute.next_hop:
+                            string += self.prefix(2) + str(hop) + "\n"
+
+                        string += self.prefix(2) + "\n" + self.prefix(2) + "NLRI:\n"
+                        for nlri in attribute.nlri:
+                            string += self.prefix(2) + str(nlri) + "\n"
+
+                    elif attribute.type == BGPStatics.UPDATE_ATTRIBUTE_MP_UNREACH_NLRI:
+                        string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ":\n"
+                        for nlri in attribute.nlri:
+                            string += self.prefix(2) + str(nlri) + "\n"
+                        
                     else:
                         # We got a "normal" path attribute
                         string += self.prefix(1) + BGPTranslation.path_attribute(attribute.type) + ": " + str(attribute) + "\n"

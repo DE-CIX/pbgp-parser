@@ -58,6 +58,9 @@ class PCAPInformation:
 
     def get_source_mac(self):
         return self.mac.source
+    
+    def get_customer_vlan(self):
+        return self.mac.vlan[0]
 
     def get_source_ip(self):
         return self.ip.source
@@ -68,6 +71,9 @@ class PCAPInformation:
     def get_destination_mac(self):
         return self.mac.destination
 
+    def get_service_vlan(self):
+        return self.mac.vlan[1]
+
     def get_destination_ip(self):
         return self.ip.destination
 
@@ -76,10 +82,11 @@ class PCAPInformation:
 
 
 class PCAPLayer2Information:
-    def __init__(self, source, destination):
+    def __init__(self, source, destination, vlan):
         # Store source and destination MAC address
         self.source = source
         self.destination = destination
+        self.vlan = vlan # [802.1q, 802.1ad]
 
     def get_source_string(self, separated=False):
         if self.source is None:
@@ -103,21 +110,54 @@ class PCAPLayer2Information:
         else:
             return output
 
+    def get_customer_vlan(self):
+        if len(self.vlan) == 0:
+            return None
+        else:
+            return self.vlan[0]
+    
+    def get_service_vlan(self):
+        if len(self.vlan) <= 1:
+            return None
+        else:
+            return self.vlan[1]
+
     def __str__(self):
-        return "<PCAPLayer2Information source={0} destination={1}>".format(self.get_source_string(), self.get_destination_string())
+        return "<PCAPLayer2Information source={0} destination={1} ; VLAN ID (Customer)={} Service={}>".format(self.get_source_string(), self.get_destination_string(), self.get_customer_vlan(), self.get_service_vlan())
 
 
 class PCAPLayer3Information:
-    def __init__(self, source, destination):
+    IP_VERSION_4 = 0x4
+    IP_VERSION_6 = 0x6
+
+    def __init__(self, source, destination, version):
         # Store source and destination IP address
+        self.version = version
         self.source = source
         self.destination = destination
 
     def get_source_string(self):
-        return str(self.source[0]) + "." + str(self.source[1]) + "." + str(self.source[2]) + "." + str(self.source[3])
+        if self.version == self.IP_VERSION_4:
+            return str(self.source[0]) + "." + str(self.source[1]) + "." + str(self.source[2]) + "." + str(self.source[3])
+        
+        if self.version == self.IP_VERSION_6:
+            output = ""
+            for i in self.source:
+                output += str( hex(i)[2:] ) + ":" 
+                        
+            return output[:-1]
 
     def get_destination_string(self):
-        return str(self.destination[0]) + "." + str(self.destination[1]) + "." + str(self.destination[2]) + "." + str(self.destination[3])
+        if self.version == self.IP_VERSION_4:
+            return str(self.destination[0]) + "." + str(self.destination[1]) + "." + str(self.destination[2]) + "." + str(self.destination[3])
+        
+        if self.version == self.IP_VERSION_6:
+            output = ""
+            for i in self.destination:
+                output += str( hex(i)[2:] ) + ":" 
+            
+            return output[:-1]
+
 
     def __str__(self):
         return "<PCAPLayer3Information source={0} destination={1}>".format(self.get_source_string(), self.get_destination_string())

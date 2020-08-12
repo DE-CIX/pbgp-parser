@@ -26,6 +26,7 @@ from pbgpp.PCAP.Information import PCAPLayer2Information
 
 class PCAPCookedCapture:
     ETH_TYPE_IPV4 = 0x0800
+    ETH_TYPE_IPV6 = 0x86DD
 
     SLL_SENT_TO_US = 0x0000
     SLL_BROADCAST = 0x0001
@@ -69,7 +70,7 @@ class PCAPCookedCapture:
                 raise Exception("SLL address length does not equal 6 (which means we don't got a MAC address here)")
 
             # MAC addresses
-            self.mac = PCAPLayer2Information(self.payload[6:12], None)
+            self.mac = PCAPLayer2Information(self.payload[6:12], None, None)
 
             # IP Type
             self.type = struct.unpack("!H", self.payload[14:16])[0]

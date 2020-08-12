@@ -25,15 +25,24 @@ from pbgpp.PCAP.Information import PCAPLayer2Information
 
 
 class PCAPEthernet:
+  
     ETH_TYPE_IPV4 = 0x0800
+    ETH_TYPE_IPV6 = 0x86DD
+    
+    ETH_TYPE_VLAN = 0x8100  # Vlan
+    ETH_TYPE_QINQ = 0x88a8  # QinQ
+    
+    BITMASK_VLAN_ID_LENGTH = 0x0FFF
 
     def __init__(self, payload):
         self.payload = payload
         self.type = None
         self.mac = None
+        self.vlan_tags = [None, None] # [802.1q, 802.1ad]
 
         self.parsing_error = False
         self.parsed = False
+        self.payload_offset = 14 # default if there are no vlan tags
 
         self.__parse()
 
@@ -44,11 +53,20 @@ class PCAPEthernet:
             # Ethernet type
             self.type = struct.unpack("!H", self.payload[12:14])[0]
 
+            if self.type == PCAPEthernet.ETH_TYPE_VLAN:
+                self.vlan_tags[0] = struct.unpack("!H", self.payload[14:16])[0] & 0x0FFF #last 12 bits are vlan id
+                self.payload_offset = 16
+                
+            if self.type == PCAPEthernet.ETH_TYPE_QINQ:
+                self.vlan_tags[0] = struct.unpack("!H", self.payload[18:20])[0] & BITMASK_VLAN_ID_LENGTH
+                self.vlan_tags[1] = struct.unpack("!H", self.payload[14:16])[0] & BITMASK_VLAN_ID_LENGTH
+                self.payload_offset = 20
+
             # MAC addresses
-            self.mac = PCAPLayer2Information(self.payload[6:12], self.payload[:6])
+            self.mac = PCAPLayer2Information(self.payload[6:12], self.payload[:6], self.vlan_tags)
 
         except Exception as e:
-            logging.error("Parsing ethernet frame caused exception (message: " + e.message + ")") #str(e)
+            logging.error("Parsing ethernet frame caused exception (message: " + str(e) + ")")
             self.parsing_error = True
 
     def get_type(self):
@@ -57,11 +75,17 @@ class PCAPEthernet:
     def get_mac(self):
         return self.mac
 
+    def get_service_vlan(self):
+        return self.vlan_tags[1]
+
+    def get_customer_vlan(self):
+        return self.vlan_tags[0]
+
     def get_payload(self):
         return self.payload
 
-    def get_eth_payload(self):
-        return self.payload[14:]
+    def get_eth_payload(self): 
+        return self.payload[self.payload_offset:] 
 
     def __str__(self):
         if self.parsed:

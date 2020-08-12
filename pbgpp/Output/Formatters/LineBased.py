@@ -24,9 +24,10 @@ from pbgpp.BGP.Update.PathAttributes.Communities import PathAttributeCommunities
 from pbgpp.BGP.Update.PathAttributes.LargeCommunities import PathAttributeLargeCommunities
 from pbgpp.BGP.Update.PathAttributes.NextHop import PathAttributeNextHop
 from pbgpp.BGP.Update.PathAttributes.Origin import PathAttributeOrigin
+from pbgpp.BGP.Update.PathAttributes.MPReachNLRI import PathAttributeMPReachNLRI
+from pbgpp.BGP.Update.PathAttributes.MPUnReachNLRI import PathAttributeMPUnReachNLRI
 from pbgpp.Output.Formatter import BGPFormatter
 from itertools import chain
-
 
 class LineBasedFormatter(BGPFormatter):
     FIELD_MESSAGE_TIMESTAMP = ["timestamp"]
@@ -34,6 +35,8 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_MESSAGE_IP_DESTINATION = ["destination_ip", "dst_ip"]
     FIELD_MESSAGE_MAC_SOURCE = ["source_mac", "src_mac", "mac_src", "mac_source"]
     FIELD_MESSAGE_MAC_DESTINATION = ["destination_mac", "dst_mac", "mac_dst", "mac_destination"]
+    FIELD_MESSAGE_VLAN_CUSTOMER = ["vlan_customer", "vlan_id_customer", "customer_vlan", "customer_vlan_id"]
+    FIELD_MESSAGE_VLAN_SERVICE = ["vlan_service", "vlan_id_service", "service_vlan", "service_vlan_id"]
     FIELD_MESSAGE_LENGTH = ["length"]
     FIELD_MESSAGE_TYPE = ["type"]
 
@@ -44,6 +47,9 @@ class LineBasedFormatter(BGPFormatter):
     FIELD_UPDATE_WITHDRAWN_ROUTES = ["withdrawn_routes", "withdrawn_route", "withdrawals"]
     FIELD_UPDATE_NLRI = ["prefixes", "prefix", "nlri"]
     FIELD_UPDATE_NLRI_LENGTH = ["prefix_length"]
+    FIELD_UPDATE_ATTRIBUTE_MP_REACH_NLRI = ["mp_reach_prefixes", "mp_reach_prefix", "mp_reach_nlri"]    
+    FIELD_UPDATE_ATTRIBUTE_MP_UNREACH_NLRI = ["mp_unreach_prefixes", "mp_unreach_prefix", "mp_unreach_nlri"]    
+    FIELD_UPDATE_ATTRIBUTE_MP_NEXT_HOP = ["mp_next_hop", "mp_nexthop"]    
     FIELD_UPDATE_ATTRIBUTE_ORIGIN = ["origin"]
     FIELD_UPDATE_ATTRIBUTE_AS_PATH = ["as_path"]
     FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN = ["as_path_last_asn"]
@@ -61,6 +67,8 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_MESSAGE_IP_DESTINATION,
                          FIELD_MESSAGE_MAC_SOURCE,
                          FIELD_MESSAGE_MAC_DESTINATION,
+                         FIELD_MESSAGE_VLAN_CUSTOMER,
+                         FIELD_MESSAGE_VLAN_SERVICE,
                          FIELD_MESSAGE_LENGTH,
                          FIELD_MESSAGE_TYPE,
                          FIELD_UPDATE_SUBTYPE,
@@ -70,6 +78,9 @@ class LineBasedFormatter(BGPFormatter):
                          FIELD_UPDATE_WITHDRAWN_ROUTES,
                          FIELD_UPDATE_NLRI,
                          FIELD_UPDATE_NLRI_LENGTH,
+                         FIELD_UPDATE_ATTRIBUTE_MP_REACH_NLRI,
+                         FIELD_UPDATE_ATTRIBUTE_MP_UNREACH_NLRI,
+                         FIELD_UPDATE_ATTRIBUTE_MP_NEXT_HOP,
                          FIELD_UPDATE_ATTRIBUTE_ORIGIN,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH,
                          FIELD_UPDATE_ATTRIBUTE_AS_PATH_LAST_ASN,
@@ -129,6 +140,14 @@ class LineBasedFormatter(BGPFormatter):
         # Destination MAC
         if f in self.FIELD_MESSAGE_MAC_DESTINATION:
             return message.pcap_information.get_mac().get_destination_string()
+
+        # Customer VLAN
+        if f in self.FIELD_MESSAGE_VLAN_CUSTOMER:
+            return message.pcap_information.get_customer_vlan()
+
+        # Customer VLAN
+        if f in self.FIELD_MESSAGE_VLAN_SERVICE:
+            return message.pcap_information.get_service_vlan()
 
         # ASN
         if f in self.FIELD_OPEN_MYASN:
@@ -213,6 +232,45 @@ class LineBasedFormatter(BGPFormatter):
             prefixes = getattr(message, "nlri", False)
             if prefixes:
                 return [r.prefix_length_string for r in prefixes]
+            return None
+
+        # Attribute: Mulitprotocol: REACHable NLRI
+        if f in self.FIELD_UPDATE_ATTRIBUTE_MP_REACH_NLRI:
+            path_attributes = getattr(message, "path_attributes", False)
+            if path_attributes:
+                result = []
+                for a in path_attributes:
+                     if isinstance(a, PathAttributeMPReachNLRI):
+                        for nlri in a.nlri:
+                            result.append(nlri)
+                if not len(result) == 0:
+                    return result
+            return None
+
+        # Attribute: Mulitprotocol: NEXT HOP
+        if f in self.FIELD_UPDATE_ATTRIBUTE_MP_NEXT_HOP:
+            path_attributes = getattr(message, "path_attributes", False)
+            if path_attributes:
+                result = []
+                for a in path_attributes:
+                     if isinstance(a, PathAttributeMPReachNLRI):
+                        for next_hop in a.next_hop:
+                            result.append(next_hop)
+                if not len(result) == 0:
+                    return result
+            return None
+
+        # Attribute: Mulitprotocol: UNREACHable NLRI
+        if f in self.FIELD_UPDATE_ATTRIBUTE_MP_UNREACH_NLRI:
+            path_attributes = getattr(message, "path_attributes", False)
+            if path_attributes:
+                result = []
+                for a in path_attributes:
+                     if isinstance(a, PathAttributeMPUnReachNLRI):
+                        for nlri in a.nlri:
+                            result.append(nlri)
+                if not len(result) == 0:
+                    return result
             return None
 
         # Attribute: Origin
