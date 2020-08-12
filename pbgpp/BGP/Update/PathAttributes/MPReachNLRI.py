@@ -21,7 +21,6 @@ from pbgpp.BGP.Statics import BGPStatics
 from pbgpp.BGP.Translation import BGPTranslation
 
 from pbgpp.BGP.Update.Route import BGPRoute
-from pbgpp.BGP.Update.Route6 import BGPRoute6
 from pbgpp.BGP.Update.PathAttribute import BGPPathAttribute
 from pbgpp.BGP.Update.PathAttributes.MPNextHop import MPNextHop
 
@@ -110,7 +109,7 @@ class PathAttributeMPReachNLRI(BGPPathAttribute):
                         prefix_len = struct.unpack("!B", self.payload[payload_pointer])[0]
                         prefix_len_bytes = int(math.ceil(prefix_len / 8.0))
                         
-                        self.nlri.append(BGPRoute6.from_binary(self.payload[payload_pointer+1:payload_pointer+1+prefix_len_bytes], self.payload[payload_pointer]))
+                        self.nlri.append(BGPRoute.from_binary(self.payload[payload_pointer+1:payload_pointer+1+prefix_len_bytes], self.payload[payload_pointer], BGPStatics.IP6_CODE))
 
                         payload_pointer += prefix_len_bytes + 1
                     

@@ -443,3 +443,7 @@ class BGPStatics:
 
     # ** BGPUpdate Path Attribute EXTENDED_COMMUNITIES trans. Generic Experimental Part 3 **
     EXT_COMMUNITY_T_GENERIC_EXPERIMENTAL_PART3_FLOW_SPEC_AS_4BYTE_FORMAT = 8
+
+    # IPV4 and IPV6 needs to be differentiated sometimes:
+    IP4_CODE = 4
+    IP6_CODE = 6 
