@@ -82,7 +82,7 @@ class PCAPInformation:
 
 
 class PCAPLayer2Information:
-    def __init__(self, source, destination, vlan): #TODO vlan tag
+    def __init__(self, source, destination, vlan):
         # Store source and destination MAC address
         self.source = source
         self.destination = destination
@@ -111,10 +111,16 @@ class PCAPLayer2Information:
             return output
 
     def get_customer_vlan(self):
-        return self.vlan[0]
+        if len(self.vlan) == 0:
+            return None
+        else:
+            return self.vlan[0]
     
     def get_service_vlan(self):
-        return self.vlan[1]
+        if len(self.vlan) <= 1:
+            return None
+        else:
+            return self.vlan[1]
 
     def __str__(self):
         return "<PCAPLayer2Information source={0} destination={1} ; VLAN ID (Customer)={} Service={}>".format(self.get_source_string(), self.get_destination_string(), self.get_customer_vlan(), self.get_service_vlan())
