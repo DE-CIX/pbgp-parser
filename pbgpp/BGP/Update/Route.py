@@ -36,7 +36,6 @@ class BGPRoute:
         # Prefix = e.g. 1337:1337:1337:1337::
         # Length = 64
         # To String: 1337:1337:1337:1337::/64 (CIDR notation)
-        print("this is the proto: {}".format(proto))
 
         # Assign values
         self.proto = proto
