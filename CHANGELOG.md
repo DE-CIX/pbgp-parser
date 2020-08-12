@@ -41,3 +41,5 @@
 **Version 0.2.20** - Fixing bug output of large communities when using the LineBased formatter
 
 **Version 0.2.20** - Add-Path capability added (RFC7911)
+
+**Version 0.3.1** - Add basic IPv6 support. Unpacking and filtering of VLAN and QinQ tagged ethernetframes is now possible.

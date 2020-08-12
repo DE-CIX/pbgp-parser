@@ -72,7 +72,9 @@ Therefore we implemented the following feature. A user is now able to toggle a F
 If the NLRI field contains two 0-Bytes (translated to two 0.0.0.0/0 prefixes which should not occur at all) the programm assumes that the first 4 bytes are a Path Identifier and treates this field as an Add-Path message.  
 
 ## Limitations
-Currently, the parser doesn't perform a reassembly on fragmented TCP packets. This may leads into parsing errors and application warnings when you are trying to parse large BGP packets with several messages.
+Currently, the parser doesn't perform a reassembly on fragmented TCP packets. This may leads into parsing errors and application warnings when you are trying to parse large BGP packets with several messages. 
+
+In general, IPv6 BGP messages are understood, even filtering for sender/receiver addresses is possible (except for shorthand ipv6 notation i.e. 1337::42 has to be extended to 1337:0:0:0:0:0:0:42). Filtering REACH_NLRI and UNREACH_NLRI is not implemented. 
 
 Currently, we are looking into some problems with running pbgpp with Python 2.7 and streaming the output to Kafka. However, Python 3.x works just fine.
 
