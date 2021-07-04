@@ -54,7 +54,7 @@ def main():
     group_4 = parser.add_argument_group("filters")
     group_4.add_argument("--filter-timestamp", help="only print messages with given epoch timestamp (e.g., 123456789)", nargs="+", action="append", dest="filter_timestamp")
     group_4.add_argument("--filter-message-size", help="only print messages with given message size in bytes (e.g., 128)", nargs="+", action="append", dest="filter_message_size")
-    group_4.add_argument("--filter-message-type", help="only print messages with given BGP message type (KEEPALIVE, NOTIFICATION, OPEN, ROUTE-REFRESH, UPDATE, WITHDRAWAL)", nargs="+", action="append", dest="filter_message_type")
+    group_4.add_argument("--filter-message-type", help="only print messages with given BGP message type (KEEPALIVE, NOTIFICATION, OPEN, ROUTE-REFRESH, UPDATE)", nargs="+", action="append", dest="filter_message_type")
     group_4.add_argument("--filter-message-subtype", help="only print UPDATE messages with given message sub type (WITHDRAWAL, ANNOUNCE, BOTH, NONE)", nargs="+", action="append", dest="filter_message_subtype")
     group_4.add_argument("--filter-nlri", help="only print messages containing the given nlri prefix (e.g., '80.81.82.0/24'", nargs="+", action="append", dest="filter_nlri")
     group_4.add_argument("--filter-withdrawn", help="only print messages containing the given withdrawn routes (e.g., '80.81.82.0/24'", nargs="+", action="append", dest="filter_withdrawn")
